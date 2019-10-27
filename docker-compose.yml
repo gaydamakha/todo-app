@@ -6,9 +6,9 @@ volumes:
 
 services:
     slim:
-        image: php:7-alpine
+        build: .
         working_dir: /var/www
-        command: php -S 0.0.0.0:8000 -t public
+        command: php -S 0.0.0.0:8080 -t public
         environment:
             docker: "true"
         ports:
@@ -16,3 +16,4 @@ services:
         volumes:
             - .:/var/www
             - logs:/var/www/logs
+            - /var/www/node_modules
