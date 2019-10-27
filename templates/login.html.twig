@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Login page
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid d-flex h-100 flex-column">
+        <div class="row">
+            <div class="col">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey }}</div>
+                {% endif %}
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.username }}, <a href="{{ path_for('logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row justify-content-center my-auto">
+            <div class="col-3 bg-dark">
+                <form method="post">
+                    <h2 class="text-center">Login</h2>
+                    <div class="input-group">
+                        <label class="w-100">
+                            <input type="text" class="form-control" name="username" placeholder="Username">
+                        </label>
+                    </div>
+                    <div class="input-group">
+                        <label class="w-100">
+                            <input type="password" class="form-control" name="password" placeholder="Password">
+                        </label>
+                    </div>
+                    <button class="btn btn-lg btn-primary w-100" type="submit">
+                        Sign in
+                    </button>
+{#                    <input type="hidden" name="_csrf_token"#}
+{#                           value="{{ csrf_token('authenticate') }}">#}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

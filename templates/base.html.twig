@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            {% webpack_entry_css 'app' %}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+{#            Include the app.scss too#}
+{#            {% webpack_entry_js 'app' %}#}
+        {% endblock %}
+    </body>
+</html>

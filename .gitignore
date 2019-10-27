@@ -1,0 +1,8 @@
+/vendor/
+/node_modules/
+.phpstorm.meta.php
+
+package-lock.json
+composer.lock
+/public/build/
+/logs/

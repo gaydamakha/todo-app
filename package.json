@@ -1,0 +1,27 @@
+{
+    "devDependencies": {
+        "core-js": "^3.0.0",
+        "css-loader": "^3.2.0",
+        "mini-css-extract-plugin": "^0.8.0",
+        "node-sass": "^4.13.0",
+        "regenerator-runtime": "^0.13.2",
+        "sass-loader": "^8.0.0",
+        "style-loader": "^1.0.0",
+        "webpack-cli": "^3.3.9",
+        "webpack-manifest-plugin": "^2.2.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "dev": "cross-env NODE_ENV=development webpack-dev-server --open --inline --hot",
+        "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    },
+    "dependencies": {
+        "bootstrap": "^4.3.1",
+        "cross-env": "^6.0.3",
+        "jquery": "^3.4.1",
+        "popper.js": "^1.16.0",
+        "sass": "^1.23.1",
+        "webpack": "^4.41.2"
+    }
+}
