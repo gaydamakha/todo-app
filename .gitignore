@@ -1,8 +1,8 @@
-/vendor/
-/node_modules/
+/back-front/vendor/
+/back-front/node_modules/
 .phpstorm.meta.php
 
-package-lock.json
-composer.lock
-/public/build/
-/logs/
+/back-front/package-lock.json
+/back-front/composer.lock
+/back-front/public/build/
+/back-front/logs/

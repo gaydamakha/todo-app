@@ -6,7 +6,7 @@ volumes:
 
 services:
     slim:
-        build: .
+        build: ./back-front/
         working_dir: /var/www
         command: php -S 0.0.0.0:8080 -t public
         environment:
@@ -14,6 +14,6 @@ services:
         ports:
             - 8080:8080
         volumes:
-            - .:/var/www
+            - ./back-front/:/var/www
             - logs:/var/www/logs
             - /var/www/node_modules

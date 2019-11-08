@@ -60,7 +60,6 @@ RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filenam
 RUN apk --update add npm
 
 WORKDIR /tmp
-RUN ls -al
 COPY package.json /tmp/
 RUN npm config set registry http://registry.npmjs.org/ && npm install
 COPY composer.json /tmp/
