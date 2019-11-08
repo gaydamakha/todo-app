@@ -57,18 +57,22 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 
 RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot && rm -rf /tmp/composer-setup.php
 
+# Setup document root
+RUN mkdir -p /var/www/html
+
 RUN apk --update add npm
 
+# Install dependencies
 WORKDIR /tmp
 COPY package.json /tmp/
 RUN npm config set registry http://registry.npmjs.org/ && npm install
 COPY composer.json /tmp/
 RUN composer install
 
-WORKDIR /var/www
-COPY . /var/www
-RUN cp -r /tmp/node_modules /var/www
-RUN cp -r /tmp/vendor /var/www
+# Setup application
+WORKDIR /var/www/html/
+COPY . /var/www/html/
+RUN cp -r /tmp/node_modules /var/www/html
+RUN cp -r /tmp/vendor /var/www/html
 
 RUN npm run build
-

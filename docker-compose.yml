@@ -5,15 +5,25 @@ volumes:
         driver: local
 
 services:
-    slim:
-        build: ./back-front/
-        working_dir: /var/www
+    back-front:
+        build: ./back-front
+        working_dir: /var/www/html/
         command: php -S 0.0.0.0:8080 -t public
         environment:
             docker: "true"
         ports:
-            - 8080:8080
+            - 8000:8080
         volumes:
-            - ./back-front/:/var/www
-            - logs:/var/www/logs
-            - /var/www/node_modules
+            - ./back-front:/var/www/html
+            - logs:/var/www/html/logs
+            - /var/www/html/node_modules
+    back:
+        build: ./back/
+        working_dir: /var/www/html/
+        environment:
+            docker: "true"
+        ports:
+            - 8001:8080 
+        volumes:
+            - ./back/:/var/www/html
+            - logs:/var/www/html/logs
