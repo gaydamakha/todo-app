@@ -2,7 +2,10 @@
 /back-front/node_modules/
 .phpstorm.meta.php
 
-/back-front/package-lock.json
 /back-front/composer.lock
 /back-front/public/build/
 /back-front/logs/
+
+/back/logs/
+/back/vendor/
+/back/composer.lock

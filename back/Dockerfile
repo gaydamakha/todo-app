@@ -1,9 +1,12 @@
 FROM alpine:3.10
 
 # Install packages
-RUN apk --no-cache add php7 php7-fpm php7-json php7-openssl php7-curl \
-    php7-zlib php7-xml php7-phar php7-intl php7-dom php7-xmlreader php7-ctype php7-session \
-    php7-mbstring php7-gd nginx supervisor curl
+RUN apk --no-cache add php7 php7-fpm php7-json php7-openssl php7-curl php7-tokenizer\
+    php7-zlib php7-xml 	php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader \
+    php7-ctype php7-session php7-mbstring php7-gd php7-pear php7-dev \
+    nginx supervisor curl gcc musl-dev make
+
+RUN pecl install mongodb && chmod 755 /usr/lib/php7/modules/mongodb.so
 
 # Configure nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
@@ -41,7 +44,7 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot && rm -rf /tmp/composer-setup.php
 
 # Setup document root
-RUN mkdir -p /var/www/html && chown -R nobody.nobody /var/www/html
+RUN mkdir -p /var/www/html && chown -R nobody:nobody /var/www/html
 
 # Make the document root a volume
 VOLUME /var/www/html
@@ -53,11 +56,12 @@ USER nobody
 WORKDIR /tmp
 COPY composer.json /tmp/
 RUN composer install
+RUN cp -r /tmp/vendor /var/www/html
 
 # Setup application
 WORKDIR /var/www/html
 COPY --chown=nobody . /var/www/html
-RUN cp -r /tmp/vendor /var/www/html
+RUN chown -R nobody:nobody /var/www/html
 
 # Expose the port nginx is reachable on
 EXPOSE 8080
