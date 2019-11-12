@@ -5,6 +5,9 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             {% webpack_entry_css 'app' %}
+            <link
+                    href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
+                    rel="stylesheet"  type='text/css'>
         {% endblock %}
     </head>
     <body>

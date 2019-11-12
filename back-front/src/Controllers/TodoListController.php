@@ -21,7 +21,9 @@ class TodoListController
 
         //Fetch the todos from API
 
-        $response = $view->render(new Response(),'home.html.twig', ['name'=>'Micha']);
+
+
+        $response = $view->render(new Response(),'todolist.html.twig', ['name'=>'Micha']);
         return $response;
     }
 }
