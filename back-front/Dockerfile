@@ -72,7 +72,9 @@ RUN composer install
 # Setup application
 WORKDIR /var/www/html/
 COPY . /var/www/html/
-RUN cp -r /tmp/node_modules /var/www/html
+RUN cp -r /tmp/node_modules /var/www/htm
+# TODO: Not working
 RUN cp -r /tmp/vendor /var/www/html
 
+# TODO: Not working
 RUN npm run build

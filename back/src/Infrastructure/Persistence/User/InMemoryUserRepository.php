@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\User;
 
+use App\Domain\User\InvalidEmailException;
 use App\Domain\User\User;
 use App\Domain\User\UserNotFoundException;
 use App\Domain\User\UserRepository;
@@ -19,6 +20,7 @@ class InMemoryUserRepository implements UserRepository
      * InMemoryUserRepository constructor.
      *
      * @param array|null $users
+     * @throws InvalidEmailException
      */
     public function __construct(array $users = null)
     {
@@ -30,11 +32,7 @@ class InMemoryUserRepository implements UserRepository
             new User('jack.dorsey@twitter.com', 'password5', 'Jack', 'Dorsey'),
         ];
 
-        $this->users = $users ?? array_map(
-            function(User $user) {
-                return [$user->getId()->__toString() => $user];
-            }
-            , $fakeUsers);
+        $this->users = $users ?? $fakeUsers;
     }
 
     /**
@@ -52,6 +50,21 @@ class InMemoryUserRepository implements UserRepository
     {
         foreach ($this->users as $user) {
             if ($id === $user->getId()) {
+                return $user;
+            }
+        }
+
+        throw new UserNotFoundException();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findUserOfUsername(string $username): User
+    {
+        $username = strtolower($username);
+        foreach ($this->users as $user) {
+            if ($username === $user->getUsername()) {
                 return $user;
             }
         }

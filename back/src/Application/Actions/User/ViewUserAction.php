@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\User;
 
-use MongoDB\BSON\ObjectId;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class ViewUserAction extends UserAction
@@ -13,10 +12,10 @@ class ViewUserAction extends UserAction
      */
     protected function action(): Response
     {
-        $userId = new ObjectId($this->resolveArg('id'));
-        $user = $this->userRepository->findUserOfId($userId);
+        $username = strtolower($this->resolveArg('username'));
+        $user = $this->userRepository->findUserOfUsername($username);
 
-        $this->logger->info("User of id `${userId}` was viewed.");
+        $this->logger->info("User of id `{$user->getId()}` was viewed.");
 
         return $this->respondWithData($user);
     }

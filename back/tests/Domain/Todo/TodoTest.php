@@ -19,7 +19,8 @@ class TodoTest extends TestCase
 
         return [
             [$author, 'Todo1', 'Good todo', $dueDate, $assignee],
-            [$author, 'Todo1', 'Good todo', $dueDate, $author]
+            [$author, 'Todo2', 'Good todo', $dueDate, $author],
+            [$author, 'Todo3', 'Good todo', $dueDate, null]
         ];
     }
 
@@ -119,10 +120,60 @@ class TodoTest extends TestCase
         $todo->addComment($commentAuthor, $comment);
 
         $expectedComment = [
-                'comment_author' => $commentAuthor,
-                'comment' => $comment
+            'comment_author' => $commentAuthor->getUsername(),
+            'comment' => $comment
         ];
 
         $this->assertContains($expectedComment, $todo->getComments());
+    }
+
+    /**
+     * Checks for valid Json serialization
+     *
+     * @dataProvider validTodoProvider
+     *
+     * @param $author
+     * @param $title
+     * @param $description
+     * @param $dueDate
+     * @param $assignee
+     */
+    public function testJsonSerialize($author, $title, $description, $dueDate, $assignee)
+    {
+        $todo = new Todo($author, $title, $description, $dueDate, $assignee);
+
+        $expectedPayload = json_encode([
+            'id' => $todo->getId()->__toString(),
+            'title' => $title,
+            'description' => $description,
+            'done' => false,
+            'due_date' => $dueDate,
+            'author_username' => $author->getUsername(),
+            'assignee_username' => $assignee ? $assignee->getUsername() : '',
+            'comments' => []
+        ], JSON_PRETTY_PRINT);
+
+        $this->assertEquals($expectedPayload, json_encode($todo,JSON_PRETTY_PRINT));
+
+        $comment = 'Comment';
+        $todo->addComment($author, $comment);
+
+        $expectedPayload = json_encode([
+            'id' => $todo->getId()->__toString(),
+            'title' => $title,
+            'description' => $description,
+            'done' => false,
+            'due_date' => $dueDate,
+            'author_username' => $author->getUsername(),
+            'assignee_username' => $assignee ? $assignee->getUsername() : '',
+            'comments' => [
+                [
+                    'comment_author' => $author->getUsername(),
+                    'comment' => $comment
+                ]
+            ]
+        ], JSON_PRETTY_PRINT);
+
+        $this->assertEquals($expectedPayload, json_encode($todo, JSON_PRETTY_PRINT));
     }
 }

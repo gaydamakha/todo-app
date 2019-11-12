@@ -79,6 +79,7 @@ class Todo implements JsonSerializable
         $this->title = $title;
         $this->description = $description;
         $this->dueDate = $dueDate;
+        $this->done = false;
         $this->comments = [];
         $author->addCreatedTodo($this);
         if (null !== $assignee) {
@@ -198,7 +199,7 @@ class Todo implements JsonSerializable
     public function addComment(User $commentAuthor, string $comment)
     {
         $this->comments[] = [
-            'comment_author' => $commentAuthor,
+            'comment_author' => $commentAuthor->getUsername(),
             'comment' => $comment
         ];
     }
@@ -214,8 +215,8 @@ class Todo implements JsonSerializable
             'description' => $this->description,
             'done' => $this->done,
             'due_date' => $this->dueDate,
-            'author' => $this->author,
-            'assignee' => $this->assignee,
+            'author_username' => $this->author->getUsername(),
+            'assignee_username' => $this->assignee ? $this->assignee->getUsername() : '',
             'comments' => $this->comments
         ];
     }

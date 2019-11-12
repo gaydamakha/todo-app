@@ -17,4 +17,10 @@ interface UserRepository
      * @return User
      */
     public function findUserOfId(ObjectId $id): User;
+
+    /**
+     * @param string $username
+     * @return User
+     */
+    public function findUserOfUsername(string $username): User;
 }

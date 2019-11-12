@@ -337,19 +337,19 @@ class UserTest extends TestCase
             'lastName' => $lastName,
             'created_todos' => $createdTodos,
             'assigned_todos' => $assignedTodos
-        ]);
+        ], JSON_PRETTY_PRINT);
 
-        $this->assertEquals($expectedPayload, json_encode($user));
+        $this->assertEquals($expectedPayload, json_encode($user, JSON_PRETTY_PRINT));
 
         $expectedPayloadAssignee = json_encode([
             'id' => $assignee->getId()->__toString(),
-            'username' => 'bill@geits.com',
-            'firstName' => 'bill',
-            'lastName' => 'geits',
+            'username' => 'bill@gmail.com',
+            'firstName' => 'Bill',
+            'lastName' => 'Geits',
             'created_todos' => [],
             'assigned_todos' => [$todo2]
-        ]);
+        ], JSON_PRETTY_PRINT);
 
-        $this->assertEquals($expectedPayloadAssignee, json_encode($assignee));
+        $this->assertEquals($expectedPayloadAssignee, json_encode($assignee, JSON_PRETTY_PRINT));
     }
 }
