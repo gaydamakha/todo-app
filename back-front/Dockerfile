@@ -29,7 +29,7 @@ RUN apk --update add \
     unzip \
     ffmpeg \
     wget && \
-    docker-php-ext-install bcmath zip bz2 pdo_mysql mysqli simplexml opcache sockets mbstring pcntl xsl pspell && \
+    docker-php-ext-install bcmath zip bz2 simplexml opcache sockets mbstring pcntl xsl pspell && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     pecl install imagick && \
     docker-php-ext-enable imagick && \
@@ -57,24 +57,20 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 
 RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot && rm -rf /tmp/composer-setup.php
 
+RUN apk --update add npm
+
 # Setup document root
 RUN mkdir -p /var/www/html
 
-RUN apk --update add npm
-
-# Install dependencies
-WORKDIR /tmp
-COPY package.json /tmp/
-RUN npm config set registry http://registry.npmjs.org/ && npm install
-COPY composer.json /tmp/
-RUN composer install
-
 # Setup application
 WORKDIR /var/www/html/
-COPY . /var/www/html/
-RUN cp -r /tmp/node_modules /var/www/htm
-# TODO: Not working
-RUN cp -r /tmp/vendor /var/www/html
 
-# TODO: Not working
+# Install dependencies
+COPY package.json /var/www/html/package.json
+RUN npm config set registry http://registry.npmjs.org/ && npm install
+COPY composer.json /var/www/html/composer.json
+RUN composer install
+
+COPY . /var/www/html/
+
 RUN npm run build

@@ -20,7 +20,7 @@ COPY config/php.ini /etc/php7/conf.d/custom.ini
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Make sure files/folders needed by the processes are accessable when they run under the nobody user
+## Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/lib/nginx && \
   chown -R nobody.nobody /var/tmp/nginx && \
@@ -44,24 +44,18 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot && rm -rf /tmp/composer-setup.php
 
 # Setup document root
-RUN mkdir -p /var/www/html && chown -R nobody:nobody /var/www/html
+RUN mkdir -p /var/www/html # && chown -R nobody:nobody /var/www/html
 
-# Make the document root a volume
-VOLUME /var/www/html
+WORKDIR /var/www/html
+
+# Install dependencies
+COPY composer.json /var/www/html
+RUN composer install
+COPY --chown=nobody . /var/www/html
+RUN chown -R nobody:nobody /var/www/html
 
 # Switch to use a non-root user from here on
 USER nobody
-
-# Install dependencies
-WORKDIR /tmp
-COPY composer.json /tmp/
-RUN composer install
-RUN cp -r /tmp/vendor /var/www/html
-
-# Setup application
-WORKDIR /var/www/html
-COPY --chown=nobody . /var/www/html
-RUN chown -R nobody:nobody /var/www/html
 
 # Expose the port nginx is reachable on
 EXPOSE 8080

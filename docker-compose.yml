@@ -17,6 +17,7 @@ services:
             - ./back-front:/var/www/html
             - logs:/var/www/html/logs
             - /var/www/html/node_modules
+            - /var/www/html/vendor
     back:
         build: ./back/
         working_dir: /var/www/html/
@@ -27,3 +28,4 @@ services:
         volumes:
             - ./back/:/var/www/html
             - logs:/var/www/html/logs
+            - /var/www/html/vendor
