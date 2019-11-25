@@ -4,19 +4,61 @@
 
     <div class="container-fluid">
         <div class="row py-5">
-            <div class="col-md-2 offset-md-1">
+            <div class="col-md-3 pl-5">
                 <h3>Liste des tâches...  </h3>
+                <hr>
                 <ul style="list-style-type: none">
-                    <li><a href="#">hey 1 <i class="fas fa-user"></i></a></li>
+                    <li><a href="#">hey 1</a></li>
                     <li><a href="#">hey 2</a></li>
                     <li><a href="#">hey 3</a></li>
                     <li><a href="#">hey 4</a></li>
                     <li><a href="#">hey 5</a></li>
-
                 </ul>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-6 offset-md-1">
+                <div class="card-body">
+                    <h6 class="card-price text-left">Titre de la tâche</h6>
+                    <input type="text" id="description" name="description" class="form-control" value="wash dishes...">
+                    <hr>
+                    <h6 class="card-price text-left">Description de la tâche</h6>
+                    <textarea class="form-control" id="txt-task" rows="3"></textarea>
+                    <hr>
 
+                    <div class="form-group" id="userBloc">
+                        <hr>
+                        <label for="option">Utilisateur concerné</label>
+                        <select class="form-control w-50" id="userTask" name="userTask">
+                            <option value="user1">Jean Morray</option>
+                            <option value="user2">Nicolas Dupont</option>
+                            <option value="user3">Sophie Malterez</option>
+                            <option value="user4">Mickaël Frank</option>
+                        </select>
+                    </div>
+
+                    <hr>
+
+                    <label class="ks-switch mt-2" for="done" >
+                        <input type="checkbox" id="done"  name="done" value="1" checked="checked">
+                        <span class="ks-slider ks-round"></span>
+                    </label>
+                    <h6>Fait</h6>
+
+
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <a href="/todos" class="btn btn-block text-uppercase">Retour</a>
+                        </div>
+                        <div class="col-sm-3 offset-sm-4">
+                            <button class="btn btn-block btn-danger text-uppercase" id="btn-deleteList" type="button">
+                                Supprimer
+                            </button>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-md btn-success text-uppercase" type="submit" >Valider</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     </div>
