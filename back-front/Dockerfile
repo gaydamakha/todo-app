@@ -1,44 +1,28 @@
-FROM php:7-fpm-alpine
+FROM alpine:3.10
 
-# Update system#
-RUN apk --update add \
-    aspell-dev \
-    autoconf \
-    build-base \
-    linux-headers \
-    libaio-dev \
-    zlib-dev \
-    curl \
-    git \
-    subversion \
-    freetype-dev \
-    libjpeg-turbo-dev \
-    libmcrypt-dev \
-    libpng-dev \
-    libtool \
-    libbz2 \
-    libzip \
-    libzip-dev \
-    bzip2-dev \
-    libstdc++ \
-    libxslt-dev \
-    openldap-dev \
-    imagemagick-dev \
-    hiredis-dev \
-    make \
-    unzip \
-    ffmpeg \
-    wget && \
-    docker-php-ext-install bcmath zip bz2 simplexml opcache sockets mbstring pcntl xsl pspell && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    pecl install imagick && \
-    docker-php-ext-enable imagick && \
-    docker-php-ext-install gd && \
-    docker-php-ext-enable opcache && \
-    apk del build-base \
-    linux-headers \
-    libaio-dev \
-    && rm -rf /var/cache/apk/*
+# Install packages
+RUN apk --no-cache add php7 php7-fpm php7-json php7-openssl php7-curl php7-tokenizer\
+    php7-zlib php7-xml 	php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader php7-simplexml\
+    php7-ctype php7-session php7-mbstring php7-gd php7-pear php7-dev php7-fileinfo php7-iconv\
+    libressl-dev nginx supervisor curl gcc musl-dev make
+
+# Configure nginx
+COPY config/nginx.conf /etc/nginx/nginx.conf
+# Remove default server definition
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Configure PHP-FPM
+COPY config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
+COPY config/php.ini /etc/php7/conf.d/custom.ini
+
+# Configure supervisord
+COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Make sure files/folders needed by the processes are accessable when they run under the nobody user
+RUN chown -R nobody.nobody /run && \
+  chown -R nobody.nobody /var/lib/nginx && \
+  chown -R nobody.nobody /var/tmp/nginx && \
+  chown -R nobody.nobody /var/log/nginx
 
 # Install composer
 # Register the COMPOSER_HOME environment variable
@@ -57,20 +41,29 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 
 RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot && rm -rf /tmp/composer-setup.php
 
+#Install npm
 RUN apk --update add npm
 
 # Setup document root
 RUN mkdir -p /var/www/html
-
-# Setup application
 WORKDIR /var/www/html/
+COPY --chown=nobody . /var/www/html/
 
 # Install dependencies
 COPY package.json /var/www/html/package.json
 RUN npm config set registry http://registry.npmjs.org/ && npm install
+RUN npm run build
 COPY composer.json /var/www/html/composer.json
 RUN composer install
 
-COPY . /var/www/html/
+# Switch to use a non-root user from here on
+USER nobody
 
-RUN npm run build
+# Expose the port nginx is reachable on
+EXPOSE 8080
+
+# Let supervisord start nginx & php-fpm
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+# Configure a healthcheck to validate that everything is up&running
+HEALTHCHECK --timeout=10s CMD curl --silent --fail http://127.0.0.1:8080/fpm-ping

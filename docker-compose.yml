@@ -1,22 +1,17 @@
 version: '3.7'
 
-volumes:
-    logs:
-        driver: local
-
 services:
     back-front:
         build: ./back-front
         working_dir: /var/www/html/
-        command: php -S 0.0.0.0:8080 -t public
         environment:
             docker: "true"
         ports:
             - 8000:8080
         volumes:
             - ./back-front:/var/www/html
-            - logs:/var/www/html/logs
             - /var/www/html/node_modules
+            - /var/www/html/public/build
             - /var/www/html/vendor
     back:
         build: ./back/
@@ -27,5 +22,4 @@ services:
             - 8001:8080 
         volumes:
             - ./back/:/var/www/html
-            - logs:/var/www/html/logs
             - /var/www/html/vendor
