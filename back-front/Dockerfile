@@ -56,6 +56,8 @@ RUN npm run build
 COPY composer.json /var/www/html/composer.json
 RUN composer install
 
+RUN chown -R nobody:nobody /var/www/html
+
 # Switch to use a non-root user from here on
 USER nobody
 

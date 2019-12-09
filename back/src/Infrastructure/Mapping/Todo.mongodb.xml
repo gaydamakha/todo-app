@@ -1,0 +1,23 @@
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                    http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+    <document name="App\Domain\Todo" collection="todos">
+        <id />
+        <field field-name="title" type="string"/>
+        <field field-name="description" type="string"/>
+        <field field-name="done" type="boolean"/>
+        <field field-name="dueDate" type="date"/>
+        <reference-one field="author" target-document="App\Domain\User">
+            <cascade>
+                <persist />
+            </cascade>
+        </reference-one>
+        <reference-one field="assignee" target-document="App\Domain\User">
+            <cascade>
+                <persist />
+            </cascade>
+        </reference-one>
+        <embed-many field="comments" target-document="App\Domain\Comment"/>
+    </document>
+</doctrine-mongo-mapping>

@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Todo;
 
-use App\Application\Actions\Action;
+use App\Application\Actions\AbstractAction;
 use App\Domain\Todo\TodoRepository;
+use App\Domain\User\UserRepository;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Psr\Log\LoggerInterface;
 
-abstract class TodoAction extends Action
+abstract class TodoAction extends AbstractAction
 {
     /**
      * @var TodoRepository
@@ -15,12 +17,25 @@ abstract class TodoAction extends Action
     protected $todoRepository;
 
     /**
-     * @param LoggerInterface $logger
-     * @param TodoRepository  $todoRepository
+     * @var UserRepository
      */
-    public function __construct(LoggerInterface $logger, TodoRepository $todoRepository)
+    protected $userRepository;
+
+    /**
+     * @param LoggerInterface $logger
+     * @param Validator $validator
+     * @param TodoRepository $todoRepository
+     * @param UserRepository $userRepository
+     */
+    public function __construct(
+        ValidatorInterface $validator,
+        LoggerInterface $logger,
+        TodoRepository $todoRepository,
+        UserRepository $userRepository
+    )
     {
-        parent::__construct($logger);
+        parent::__construct($validator, $logger);
         $this->todoRepository = $todoRepository;
+        $this->userRepository = $userRepository;
     }
 }

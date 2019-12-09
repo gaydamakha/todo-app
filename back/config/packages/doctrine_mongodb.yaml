@@ -1,0 +1,15 @@
+doctrine_mongodb:
+  connections:
+    default:
+      server: "%mongodb_server%"
+      options: {}
+  default_database: todo_db
+  document_managers:
+    default:
+      auto_mapping: false
+      mappings:
+        App:
+          is_bundle: false
+          type: xml
+          dir: '%kernel.project_dir%/src/Infrastructure/Mapping'
+          prefix: App\Domain

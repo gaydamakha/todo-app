@@ -1,0 +1,46 @@
+#Users
+list_users: #done
+    path: /users
+    methods: [GET]
+    controller: App\Application\Actions\User\ListUsersAction::action
+create_user: #done except authentication
+    path: /users
+    controller: App\Application\Actions\User\CreateUserAction::action
+    methods: [POST]
+view_user: #done
+    path: /users/{username}
+    methods: [GET]
+    controller: App\Application\Actions\User\ViewUserAction::action
+delete_user: #done except authentication
+    path: /users/{username}
+    methods: [DELETE]
+    controller: App\Application\Actions\User\DeleteUserAction::action
+#Todos
+list_todos: #done
+    path: /todos
+    methods: [GET]
+    controller: App\Application\Actions\Todo\ListTodosAction::action
+create_todo: #done except authentication
+    path: /todos
+    methods: [POST]
+    controller: App\Application\Actions\Todo\CreateTodoAction::action
+view_todo: #done
+    path: /todos/{id}
+    methods: [GET]
+    controller: App\Application\Actions\Todo\ViewTodoAction::action
+delete_todo: #done
+    path: /todos/{id}
+    methods: [DELETE]
+    controller: App\Application\Actions\Todo\DeleteTodoAction::action
+assign_todo: #needs authentication
+    path: /todos/{id}/assign
+    methods: [PATCH]
+    controller: App\Application\Actions\Todo\AssignTodoAction::action
+comment_todo:
+    path: /todos/{id}/comment
+    methods: [POST]
+    controller: App\Application\Actions\Todo\CommentTodoAction::action
+edit_comment:
+    path: /todos/{id}/comment
+    methods: [PUT]
+    controller: App\Application\Actions\Todo\EditCommentTodoAction::action

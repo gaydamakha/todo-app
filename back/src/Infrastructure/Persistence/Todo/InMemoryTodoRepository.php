@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Persistence\Todo;
 
-use App\Domain\Todo\Todo;
+use App\Domain\Todo;
 use App\Domain\Todo\TodoNotFoundException;
 use App\Domain\Todo\TodoRepository;
-use App\Domain\User\User;
+use App\Domain\User;
 use DateTime;
 use MongoDB\BSON\ObjectId;
 
@@ -28,11 +28,11 @@ class InMemoryTodoRepository implements TodoRepository
     public function __construct(array $todos = null)
     {
         $fakeUsers = [
-            new User('bill.gates@outlook.com', 'password1', 'Bill', 'Gates'),
-            new User('steve.jobs@apple.com', 'password2', 'Steve', 'Jobs'),
-            new User('mark.zuckerberg@facebook.com', 'password3', 'Mark', 'Zuckerberg'),
-            new User('evan.spiegel@snap.com', 'password4', 'Evan', 'Spiegel'),
-            new User('jack.dorsey@twitter.com', 'password5', 'Jack', 'Dorsey'),
+            new User((string)(new ObjectId), 'bill.gates@outlook.com', 'password1', 'Bill', 'Gates'),
+            new User((string)(new ObjectId), 'steve.jobs@apple.com', 'password2', 'Steve', 'Jobs'),
+            new User((string)(new ObjectId), 'mark.zuckerberg@facebook.com', 'password3', 'Mark', 'Zuckerberg'),
+            new User((string)(new ObjectId), 'evan.spiegel@snap.com', 'password4', 'Evan', 'Spiegel'),
+            new User((string)(new ObjectId), 'jack.dorsey@twitter.com', 'password5', 'Jack', 'Dorsey'),
         ];
 
         $dueDate = new DateTime();
@@ -59,7 +59,7 @@ class InMemoryTodoRepository implements TodoRepository
     /**
      * {@inheritdoc}
      */
-    public function findTodoOfId(ObjectId $id): Todo
+    public function findTodoOfId(string $id): Todo
     {
         foreach ($this->todos as $todo) {
             if ($id === $todo->getId()) {
@@ -68,5 +68,38 @@ class InMemoryTodoRepository implements TodoRepository
         }
 
         throw new TodoNotFoundException();
+    }
+
+    /**
+     * @param Todo $todo
+     * @return void
+     */
+    public function createTodo(
+        User $author,
+        string $title,
+        string $description = null,
+        string $dueDate = null,
+        User $assignee = null): Todo
+    {
+        // TODO: Implement addTodo() method.
+    }
+
+    /**
+     * @param ObjectId $id
+     * @return void
+     */
+    public function removeTodoOfId(string $id): void
+    {
+        // TODO: Implement removeTodoOfId() method.
+    }
+
+    /**
+     * @param string $todoId
+     * @param User $user
+     * @return Todo
+     */
+    public function assignTodo(string $todoId, User $user, User $assignee): Todo
+    {
+        // TODO: Implement assignTodo() method.
     }
 }

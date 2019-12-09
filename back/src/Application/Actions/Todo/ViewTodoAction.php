@@ -3,21 +3,22 @@ declare(strict_types=1);
 
 namespace App\Application\Actions\Todo;
 
-use MongoDB\BSON\ObjectId;
-use Psr\Http\Message\ResponseInterface as Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ViewTodoAction extends TodoAction
 {
     /**
      * {@inheritdoc}
      */
-    protected function action(): Response
+    public function action(Request $request): Response
     {
-        $id = new ObjectId($this->resolveArg('id'));
+        $id = $request->get('id');
+
         $todo = $this->todoRepository->findTodoOfId($id);
 
         $this->logger->info("Todo of id `{$id}` was viewed.");
 
-        return $this->respondWithData($todo);
+        return $this->respond($todo, Response::HTTP_OK);
     }
 }

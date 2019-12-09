@@ -2,9 +2,9 @@ FROM alpine:3.10
 
 # Install packages
 RUN apk --no-cache add php7 php7-fpm php7-json php7-openssl php7-curl php7-tokenizer\
-    php7-zlib php7-xml 	php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader \
-    php7-ctype php7-session php7-mbstring php7-gd php7-pear php7-dev \
-    nginx supervisor curl gcc musl-dev make
+    php7-zlib php7-xml 	php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader php7-simplexml\
+    php7-ctype php7-session php7-mbstring php7-gd php7-pear php7-dev php7-fileinfo php7-iconv\
+    libressl-dev nginx supervisor curl gcc musl-dev make
 
 RUN pecl install mongodb && chmod 755 /usr/lib/php7/modules/mongodb.so
 
@@ -20,7 +20,7 @@ COPY config/php.ini /etc/php7/conf.d/custom.ini
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-## Make sure files/folders needed by the processes are accessable when they run under the nobody user
+# Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/lib/nginx && \
   chown -R nobody.nobody /var/tmp/nginx && \
@@ -44,14 +44,14 @@ RUN curl -o /tmp/composer-setup.php https://getcomposer.org/installer \
 RUN php /tmp/composer-setup.php --no-ansi --install-dir=/usr/local/bin --filename=composer --snapshot && rm -rf /tmp/composer-setup.php
 
 # Setup document root
-RUN mkdir -p /var/www/html # && chown -R nobody:nobody /var/www/html
-
+RUN mkdir -p /var/www/html
 WORKDIR /var/www/html
+COPY --chown=nobody . /var/www/html
 
 # Install dependencies
 COPY composer.json /var/www/html
 RUN composer install
-COPY --chown=nobody . /var/www/html
+
 RUN chown -R nobody:nobody /var/www/html
 
 # Switch to use a non-root user from here on

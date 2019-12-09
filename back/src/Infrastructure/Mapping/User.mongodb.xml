@@ -1,0 +1,22 @@
+<doctrine-mongo-mapping xmlns="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping"
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
+                    http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
+    <document name="App\Domain\User" collection="users">
+        <id />
+        <field field-name="username" type="string" unique="true" />
+        <field field-name="password" type="string" />
+        <field field-name="firstName" type="string" />
+        <field field-name="lastName" type="string" />
+        <reference-many target-document="App\Domain\Todo" field="createdTodos" orphan-removal="true">
+            <cascade>
+                <all />
+            </cascade>
+        </reference-many>
+        <reference-many target-document="App\Domain\Todo" field="assignedTodos">
+            <cascade>
+                <persist />
+            </cascade>
+        </reference-many>
+    </document>
+</doctrine-mongo-mapping>

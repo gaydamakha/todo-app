@@ -1,26 +1,23 @@
 <?php
-declare(strict_types=1);
+
 
 namespace App\Application\Actions\User;
 
-use App\Application\Actions\Action;
+use App\Application\Actions\AbstractAction;
 use App\Domain\User\UserRepository;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-abstract class UserAction extends Action
+abstract class UserAction extends AbstractAction
 {
     /**
      * @var UserRepository
      */
     protected $userRepository;
 
-    /**
-     * @param LoggerInterface $logger
-     * @param UserRepository  $userRepository
-     */
-    public function __construct(LoggerInterface $logger, UserRepository $userRepository)
+    public function __construct(ValidatorInterface $validator, LoggerInterface $logger, UserRepository $userRepository)
     {
-        parent::__construct($logger);
+        parent::__construct($validator, $logger);
         $this->userRepository = $userRepository;
     }
 }

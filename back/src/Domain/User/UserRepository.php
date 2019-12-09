@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
-use MongoDB\BSON\ObjectId;
+use App\Domain\User;
 
 interface UserRepository
 {
@@ -13,14 +13,32 @@ interface UserRepository
     public function findAll(): array;
 
     /**
-     * @param ObjectId $id
+     * @param string $id
      * @return User
+     * @throws UserNotFoundException
      */
-    public function findUserOfId(ObjectId $id): User;
+    public function findUserOfId(string $id);
 
     /**
      * @param string $username
      * @return User
+     * @throws UserNotFoundException
      */
-    public function findUserOfUsername(string $username): User;
+    public function findUserOfUsername(string $username);
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @param string $firstName
+     * @param string $lastName
+     * @return User
+     */
+    public function createUser(string $username, string $password, string $firstName, string $lastName): User;
+
+    /**
+     * @param string $username
+     * @return User
+     * @throws UserNotFoundException
+     */
+    public function deleteUser(string $username): User;
 }

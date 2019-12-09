@@ -1,22 +1,24 @@
 <?php
-declare(strict_types=1);
+
 
 namespace App\Application\Actions\User;
 
-use Psr\Http\Message\ResponseInterface as Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ViewUserAction extends UserAction
 {
     /**
-     * {@inheritdoc}
+     * @return Response
      */
-    protected function action(): Response
+    public function action(Request $request): Response
     {
-        $username = strtolower($this->resolveArg('username'));
+        $username = $request->get('username');
+
         $user = $this->userRepository->findUserOfUsername($username);
 
-        $this->logger->info("User of id `{$user->getId()}` was viewed.");
+        $this->logger->info("User `{$user->getId()}` was viewed.");
 
-        return $this->respondWithData($user);
+        return $this->respond($user, Response::HTTP_OK);
     }
 }

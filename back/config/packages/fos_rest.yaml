@@ -1,0 +1,8 @@
+fos_rest:
+  service:
+    serializer: fos_rest.serializer.symfony
+  serializer:
+    serialize_null: true
+  format_listener:
+    rules:
+      - { path: ^/, prefer_extension: true, fallback_format: json, priorities: [ json ] }
