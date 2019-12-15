@@ -7,12 +7,13 @@ use App\Domain\Todo\InvalidAuthorException;
 use App\Domain\Todo\InvalidAuthorOrAssigneeException;
 use Doctrine\Common\Collections\ArrayCollection;
 use JsonSerializable;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class User
  * @package App\Domain\User
  */
-class User implements JsonSerializable
+class User implements JsonSerializable, UserInterface
 {
     /**
      * @var string
@@ -20,6 +21,8 @@ class User implements JsonSerializable
     private $id;
 
     /**
+     * It's an email, in fact
+     *
      * @var string
      */
     private $username;
@@ -142,18 +145,25 @@ class User implements JsonSerializable
      */
     public function removeCreatedTodo(Todo $todo): bool
     {
-        //Only the author of the Todo have a right to delete it
+        $author = $todo->getAuthor();
+        //Only the assignee of the Todo have a right to do it
+        if ($author !== $this) {
+            throw new InvalidAuthorException();
+        }
+        //desassign this todo from the assignee
+        $todo->getAssignee()->removeAssignedTodo($todo);
+
         return $this->createdTodos->removeElement($todo);
     }
 
     /**
      * @param Todo $todo
-     * @param User $assignee
+     * @param User|null $newAssignee
      * @throws InvalidAuthorOrAssigneeException
      */
-    public function assignTodo(Todo $todo, User $assignee)
+    public function assignTodo(Todo $todo, ?User $newAssignee)
     {
-        //Only Author or Assignee have a right to reassign a todo
+        //Only Author or Assignee have a right to assign a todo
         if ($todo->getAuthor() !== $this && $todo->getAssignee() !== $this) {
             throw new InvalidAuthorOrAssigneeException();
         }
@@ -162,20 +172,24 @@ class User implements JsonSerializable
         $prevAssignee = $todo->getAssignee();
 
         if (null !== $prevAssignee) {
-            $prevAssignee->removeAssignedTodo($todo, $prevAssignee);
+            $prevAssignee->removeAssignedTodo($todo);
         }
 
+        //Assign new person
+        $todo->setAssignee($newAssignee);
+
         //Add this todo to the new assignee
-        $assignee->addAssignedTodo($todo);
-        //Mark him as an assignee for this todo
-        $todo->setAssignee($assignee);
+        if (null !== $newAssignee) {
+            $newAssignee->addAssignedTodo($todo);
+        }
     }
 
     /**
      * @param Todo $todo
      */
-    public function addAssignedTodo(Todo $todo): void
+    private function addAssignedTodo(Todo $todo): void
     {
+        //As it is private, no problem (only a developer of the Domain can call it)
         $this->assignedTodos->add($todo);
     }
 
@@ -193,16 +207,16 @@ class User implements JsonSerializable
      * @return bool True if todo was in the collection, false otherwise
      * @throws InvalidAuthorOrAssigneeException
      */
-    public function removeAssignedTodo(Todo $todo, User $assignee)
+    public function removeAssignedTodo(Todo $todo)
     {
-        //Only the author or assignee of the Todo have a right to do it
-        if ($todo->getAuthor() !== $this && $todo->getAssignee() !== $this) {
+        $assignee = $todo->getAssignee();
+        //Only the assignee of the Todo have a right to do it
+        if ($assignee !== $this) {
             throw new InvalidAuthorOrAssigneeException();
         }
-
         $todo->setAssignee(null);
-        //TODO: check here because normally right problems
-        return $assignee->assignedTodos->removeElement($todo);
+
+        return $this->assignedTodos->removeElement($todo);
     }
 
     /**
@@ -219,4 +233,47 @@ class User implements JsonSerializable
             'assigned_todos' => $this->getAssignedTodos()
         ];
     }
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     *     public function getRoles()
+     *     {
+     *         return ['ROLE_USER'];
+     *     }
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return (Role|string)[] The user roles
+     */
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+
+    }
+
 }

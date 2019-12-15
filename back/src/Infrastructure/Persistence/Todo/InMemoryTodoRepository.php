@@ -88,7 +88,7 @@ class InMemoryTodoRepository implements TodoRepository
      * @param ObjectId $id
      * @return void
      */
-    public function removeTodoOfId(string $id): void
+    public function removeTodoOfId(string $id, User $maybeAuthor): void
     {
         // TODO: Implement removeTodoOfId() method.
     }
@@ -98,8 +98,19 @@ class InMemoryTodoRepository implements TodoRepository
      * @param User $user
      * @return Todo
      */
-    public function assignTodo(string $todoId, User $user, User $assignee): Todo
+    public function assignTodo(string $todoId, User $maybeAuthorOrAssignee, ?User $newAssignee): Todo
     {
         // TODO: Implement assignTodo() method.
+    }
+
+    /**
+     * @param string $todoId
+     * @param User $commentAuthor
+     * @param string $comment
+     * @return Todo
+     */
+    public function addComment(string $todoId, User $commentAuthor, string $comment): Todo
+    {
+        // TODO: Implement commentTodo() method.
     }
 }

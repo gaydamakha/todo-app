@@ -39,7 +39,7 @@ interface TodoRepository
      * @param string $id
      * @return void
      */
-    public function removeTodoOfId(string $id): void;
+    public function removeTodoOfId(string $id, User $maybeAuthor): void;
 
     /**
      * @param string $todoId
@@ -47,5 +47,13 @@ interface TodoRepository
      * @param User $assignee
      * @return Todo
      */
-    public function assignTodo(string $todoId, User $user, User $assignee): Todo;
+    public function assignTodo(string $todoId, User $maybeAuthorOrAssignee, ?User $newAssignee): Todo;
+
+    /**
+     * @param string $todoId
+     * @param User $commentAuthor
+     * @param string $comment
+     * @return Todo
+     */
+    public function addComment(string $todoId, User $commentAuthor, string $comment): Todo;
 }

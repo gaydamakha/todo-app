@@ -55,11 +55,11 @@ class MongoTodoRepository extends MongoRepository implements TodoRepository
      * @throws TodoNotFoundException
      * @throws Todo\InvalidAuthorOrAssigneeException
      */
-    public function removeTodoOfId(string $id): void
+    public function removeTodoOfId(string $id, User $maybeAuthor): void
     {
         $todo = $this->findTodoOfId($id);
-        $todo->getAuthor()->removeCreatedTodo($todo);
-        $todo->getAuthor()->removeAssignedTodo($todo, $todo->getAssignee());
+        //Throws an exception if it is not an author
+        $maybeAuthor->removeCreatedTodo($todo);
         $this->dm->remove($todo);
         $this->dm->flush();
     }
@@ -71,10 +71,26 @@ class MongoTodoRepository extends MongoRepository implements TodoRepository
      * @throws TodoNotFoundException
      * @throws Todo\InvalidAuthorOrAssigneeException
      */
-    public function assignTodo(string $todoId, User $user, User $assignee): Todo
+    public function assignTodo(string $todoId, User $maybeAuthorOrAssignee, ?User $newAssignee): Todo
     {
         $todo = $this->findTodoOfId($todoId);
-        $user->assignTodo($todo, $assignee);
+        //Throws an exception if it's not a user or assignee
+        $maybeAuthorOrAssignee->assignTodo($todo, $newAssignee);
+        $this->dm->flush();
+        return $todo;
+    }
+
+    /**
+     * @param string $todoId
+     * @param User $commentAuthor
+     * @param string $comment
+     * @return Todo
+     */
+    public function addComment(string $todoId, User $commentAuthor, string $comment): Todo
+    {
+        $todo = $this->findTodoOfId($todoId);
+        $todo->addComment((string)(New ObjectId()), $commentAuthor, $comment);
+        $this->dm->flush();
         return $todo;
     }
 }

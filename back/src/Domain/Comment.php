@@ -10,7 +10,7 @@ use MongoDB\BSON\ObjectId;
 class Comment implements JsonSerializable
 {
     /**
-     * @var ObjectId
+     * @var string
      */
     private $id;
 
@@ -24,8 +24,9 @@ class Comment implements JsonSerializable
      */
     private $text;
 
-    public function __construct(User $author, string $text)
+    public function __construct(string $id, User $author, string $text)
     {
+        $this->id = $id;
         $this->author = $author;
         $this->text = $text;
     }

@@ -2,7 +2,7 @@
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                         xsi:schemaLocation="http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping
                     http://doctrine-project.org/schemas/odm/doctrine-mongo-mapping.xsd">
-    <document name="App\Domain\Comment" collection="todos">
+    <embedded-document name="App\Domain\Comment" collection="todos">
         <id />
         <field field-name="text" type="string"/>
         <reference-one target-document="App\Domain\User" field="author">
@@ -10,5 +10,5 @@
                 <all />
             </cascade>
         </reference-one>
-    </document>
+    </embedded-document>
 </doctrine-mongo-mapping>

@@ -7,5 +7,5 @@ use App\Domain\DomainException\DomainInvalidValueException;
 
 class InvalidAuthorOrAssigneeException extends DomainInvalidValueException
 {
-    public $message = 'You are not author or assignee, so toy have no right to interact with this todo.';
+    public $message = 'You are not author or assignee, so you have no right to interact with this todo.';
 }

@@ -91,4 +91,13 @@ class MongoUserRepository extends MongoRepository implements UserRepository
         $this->dm->flush();
         return $user;
     }
+
+    /**
+     * @param string $apiToken
+     * @return User|object
+     */
+    public function findUserByToken(string $apiToken)
+    {
+        return $this->findOneBy(['apiToken' => $apiToken]);
+    }
 }

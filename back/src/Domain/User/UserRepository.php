@@ -41,4 +41,10 @@ interface UserRepository
      * @throws UserNotFoundException
      */
     public function deleteUser(string $username): User;
+
+    /**
+     * @param string $apiToken
+     * @return User|object
+     */
+    public function findUserByToken(string $apiToken);
 }

@@ -208,10 +208,12 @@ class Todo implements JsonSerializable
      * @param User $commentAuthor
      * @param string $comment
      */
-    public function addComment(User $commentAuthor, string $comment)
+    public function addComment(string $id, User $commentAuthor, string $comment)
     {
-        $comment = new Comment($commentAuthor, $comment);
+        $comment = new Comment($id, $commentAuthor, $comment);
         $this->comments->add($comment);
+
+        return $this;
     }
 
     /**

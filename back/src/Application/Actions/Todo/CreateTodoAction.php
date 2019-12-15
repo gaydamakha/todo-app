@@ -5,6 +5,7 @@ namespace App\Application\Actions\Todo;
 use App\Application\Actions\PostActionInterface;
 use App\Domain\DomainException\DomainInvalidValueException;
 use App\Domain\Todo;
+use App\Domain\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,11 +17,12 @@ class CreateTodoAction extends TodoAction implements PostActionInterface
      */
     public function action(Request $request): Response
     {
-        //TODO: remove "author" field and fetch from authorization service
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
         $body = $request->request->all();
         $this->validateBody($body);
         $data = $body['data'];
-        $authorUsername = $data['author'];
+        $authorUsername = $currentUser->getUsername();
         $title = $data['title'];
         $description = $data['description'];
         $dueDate = $data['due_date'];
@@ -49,7 +51,6 @@ class CreateTodoAction extends TodoAction implements PostActionInterface
     {
         $constraints = new Assert\Collection([
             'data' => new Assert\Collection([
-                'author' => new Assert\Email(),
                 'title' => [
                     new Assert\NotBlank(),
                     new Assert\Type(['type' => 'string'])

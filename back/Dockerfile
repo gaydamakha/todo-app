@@ -4,7 +4,7 @@ FROM alpine:3.10
 RUN apk --no-cache add php7 php7-fpm php7-json php7-openssl php7-curl php7-tokenizer\
     php7-zlib php7-xml 	php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader php7-simplexml\
     php7-ctype php7-session php7-mbstring php7-gd php7-pear php7-dev php7-fileinfo php7-iconv\
-    libressl-dev nginx supervisor curl gcc musl-dev make
+    libressl-dev nginx supervisor curl gcc musl-dev make openssl
 
 RUN pecl install mongodb && chmod 755 /usr/lib/php7/modules/mongodb.so
 
@@ -56,6 +56,11 @@ RUN chown -R nobody:nobody /var/www/html
 
 # Switch to use a non-root user from here on
 USER nobody
+
+# Generate keys for JWT
+RUN mkdir -p /var/www/html/config/jwt
+RUN openssl genpkey -out /var/www/html/config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:lalalala
+RUN openssl pkey -in /var/www/html/config/jwt/private.pem -out /var/www/html/config/jwt/public.pem -pubout -passin pass:lalalala
 
 # Expose the port nginx is reachable on
 EXPOSE 8080

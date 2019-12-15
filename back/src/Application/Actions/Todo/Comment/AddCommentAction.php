@@ -1,36 +1,34 @@
 <?php
 
-
 namespace App\Application\Actions\Todo\Comment;
-
 
 use App\Application\Actions\PostActionInterface;
 use App\Application\Actions\Todo\TodoAction;
-use App\Domain\DomainException\DomainRecordNotFoundException;
+use App\Domain\DomainException\DomainInvalidValueException;
 use App\Domain\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class AddCommentAction extends TodoAction implements PostActionInterface
 {
-
     /**
      * {@inheritDoc}
      */
     public function action(Request $request): Response
     {
-        $todoId = new ObjectId($this->resolveArg('id'));
-        $todo = $this->todoRepository->findTodoOfId($todoId);
-        $body = $this->request->getParsedBody();
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+        $body = $request->request->all();
         $this->validateBody($body);
-//        $commentText = $body['data']['comment'];
-        //$commentAuthor = $this->auth->getCurrentUser(); //TODO: fetch current user after get verification done
-//        $todo->addComment($commentAuthor, $commentText);
+        $todoId = $request->get('id');
+        $comment = $body['data']['comment'];
 
-        $this->logger->info("A comment for the todo of id `{$todoId}` was created.");//TODO: add Username here
+        $this->todoRepository->addComment($todoId, $currentUser, $comment);
 
-        //change code
-        return $this->respond($todoId);
+        $this->logger->info("A comment for the todo of id `{$todoId}` by user of id `{$currentUser->getId()}` was created.");
+
+        return $this->respond(['id' => $todoId], Response::HTTP_CREATED);
     }
 
     /**
@@ -39,22 +37,18 @@ class AddCommentAction extends TodoAction implements PostActionInterface
      */
     public function validateBody(array &$body): void
     {
-        //TODO: rewrite validation
-        $v = $this->validator;
-        if (!$v::key('data')->validate($body)) {
-            throw new InvalidRequestPayloadException($this->request, "Key 'data' not found in request payload");
-        }
-        $data = $body['data'];
-        try {
-            $v->keySet(
-                new Key('comment', $v::allOf(
-                    $v::stringType(),
-                    $v::notBlank(),
-                    $v::notEmpty()
-                ))
-            )->assert($data);
-        } catch (\Exception $e) {
-            throw new InvalidRequestPayloadException($this->request, $e->getFullMessage());
+        $constraints = new Assert\Collection([
+            'data' => new Assert\Collection([
+                'comment' => [
+                    new Assert\NotBlank(),
+                    new Assert\Type(['type' => 'string'])
+                ],
+            ])
+        ]);
+
+        $violations = $this->validator->validate($body, $constraints);
+        if (0 !== count($violations)) {
+            throw new DomainInvalidValueException((string) $violations);
         }
     }
 }

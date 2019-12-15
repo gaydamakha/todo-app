@@ -94,4 +94,13 @@ class InMemoryUserRepository implements UserRepository
     {
         // TODO: Implement deleteUser() method.
     }
+
+    /**
+     * @param string $apiToken
+     * @return User
+     */
+    public function findUserByToken(string $apiToken)
+    {
+        // TODO: Implement findUserByToken() method.
+    }
 }

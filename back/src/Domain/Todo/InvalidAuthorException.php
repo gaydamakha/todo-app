@@ -7,5 +7,5 @@ use App\Domain\DomainException\DomainInvalidValueException;
 
 class InvalidAuthorException extends DomainInvalidValueException
 {
-    public $message = 'The author of Todo is invalid.';
+    public $message = 'You are not an author';
 }

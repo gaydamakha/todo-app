@@ -27,7 +27,6 @@ class CreateUserAction extends UserAction implements PostActionInterface
         $password = $data['password'];
         $firstname = $data['firstname'];
         $lastname = $data['lastname'];
-        //TODO: create an authentication
 
         $user = $this->userRepository->createUser($username, $password, $firstname, $lastname);
 
