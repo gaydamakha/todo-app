@@ -8,12 +8,19 @@
             <link
                     href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
                     rel="stylesheet"  type='text/css'>
+            <link
+                    href="/assets/css/bootstrap-datepicker.css"
+                    rel="stylesheet"  type='text/css'>
         {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
         {% block javascripts %}
-{#            Include the app.scss too#}
+            <script src="/assets/js/bootstrap-datepicker.js"></script>
+            <script src="/assets/locales/bootstrap-datepicker.fr.min.js"></script>
+            <script src="/assets/locales/bootstrap-datepicker.fr-CH.min.js"></script>
+
+            {#            Include the app.scss too#}
 {#            {% webpack_entry_js 'app' %}#}
         {% endblock %}
     </body>

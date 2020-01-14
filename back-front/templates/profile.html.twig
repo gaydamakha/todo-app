@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row py-5">
+            <div class="col-md-5 pl-5">
+                <h3>Liste des tâches crées</h3>
+                <hr>
+                <ul style="list-style-type: none">
+                    <li class="a-task"><a href="#">hey 1</a></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 2</a></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 3</a></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 4</a></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 5</a></li>
+                    <hr class="mbt-02">
+                </ul>
+            </div>
+
+            <div class="col-md-5 pl-5">
+                <h3>Liste des tâches assignées</h3>
+                <hr>
+                <ul style="list-style-type: none">
+                    <li class="a-task">
+                        <a href="#">hey 1</a>
+                        <span class="bg-info txt-dest">FROM: Henry</span>
+                        <span class="bg-warning txt-dest">TO: Arthur</span>
+                    </li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 2</a></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 3</a></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 4</a></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><a href="#">hey 5</a></li>
+                    <hr class="mbt-02">
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+
+{% endblock %}

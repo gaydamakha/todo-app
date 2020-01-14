@@ -2,23 +2,32 @@
 
 {% block body %}
 
+
+
     <div class="container-fluid">
         <div class="row py-5">
             <div class="col-md-3 pl-5">
-                <h3>Liste des tâches...  </h3>
+                <h3>Liste des tâches</h3>
                 <hr>
                 <ul style="list-style-type: none">
-                    <li><a href="#">hey 1</a></li>
-                    <li><a href="#">hey 2</a></li>
-                    <li><a href="#">hey 3</a></li>
-                    <li><a href="#">hey 4</a></li>
-                    <li><a href="#">hey 5</a></li>
+                    <li class="a-task"><button data-value="1">hey 1</button></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><button data-value="2">hey 2</button></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><button data-value="3">hey 3</button></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><button data-value="4">hey 4</button></li>
+                    <hr class="mbt-02">
+                    <li class="a-task"><button data-value="5">hey 5</button></li>
+                    <hr class="mbt-02">
                 </ul>
             </div>
             <div class="col-md-6 offset-md-1">
+                <hr>
+
                 <div class="card-body">
                     <h6 class="card-price text-left">Titre de la tâche</h6>
-                    <input type="text" id="description" name="description" class="form-control" value="wash dishes...">
+                    <input type="text" id="description" name="description" class="form-control" placeholder="wash dishes...">
                     <hr>
                     <h6 class="card-price text-left">Description de la tâche</h6>
                     <textarea class="form-control" id="txt-task" rows="3"></textarea>
@@ -37,12 +46,24 @@
 
                     <hr>
 
+                    <span class="fa-li"></span>Date d'échance:
+                    <div class="input-group" style="width: 220px" >
+                        <input type="text" class="form-control datepicker" name="start" id="start">
+                        <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar"></i></span></div>
+                        <span class="invalid-feedback"></span>
+                    </div>
+
+                    <hr>
+
                     <label class="ks-switch mt-2" for="done" >
                         <input type="checkbox" id="done"  name="done" value="1" checked="checked">
                         <span class="ks-slider ks-round"></span>
-                    </label>
-                    <h6>Fait</h6>
+                        <h6 class="pl-5 ml-3 pt-1">Fait</h6>
 
+                    </label>
+
+
+                    <hr>
 
                     <div class="row">
                         <div class="col-sm-2">
@@ -62,6 +83,24 @@
             </div>
         </div>
     </div>
+
+
+
+    <script>
+        $(function() {
+            // ini
+        });
+
+        $("[data-value]").click(function(){
+            $.ajax({
+                url: '/todos/'. $(this).data("value"),
+                type: 'GET',
+            }).fail(function () {
+            }).done(function () {
+            });
+        });
+
+    </script>
 
 
 {% endblock %}

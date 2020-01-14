@@ -3,3 +3,65 @@
 html, body {
   height: 100%;
 }
+
+.a-task:hover {
+  background-color:#EFEFEF;
+}
+
+.mbt-02 {
+  margin-bottom: 0.1rem;
+  margin-top: 0.1rem;
+}
+
+.ks-switch {
+  display: inline-block;
+  height: 26px;
+  position: relative;
+  width: 55px;
+}
+
+.ks-switch input {
+  display:none;
+}
+
+.ks-slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.ks-slider:before {
+  background-color: #fff;
+  bottom: 3px;
+  content: "";
+  left: 4px;
+  position: absolute;
+  transition: .4s;
+  height: 20px;
+  width: 20px;
+}
+
+input:checked + .ks-slider {
+  background-color: #66bb6a;
+}
+
+input:checked + .ks-slider:before {
+  transform: translateX(26px);
+}
+
+.ks-slider.ks-round {
+  border-radius: 16px;
+}
+
+.ks-slider.ks-round:before {
+  border-radius: 50%;
+}
+
+.txt-dest{
+  font-size
+}
