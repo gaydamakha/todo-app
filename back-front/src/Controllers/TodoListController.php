@@ -56,4 +56,24 @@ class TodoListController
         $response = $view->render(new Response(),'profile.html.twig', ['user' => $user]);
         return $response;
     }
+
+    public function signIn() {
+        /** @var Twig $view */
+        $view = $this->container->get('view');
+
+        //Fetch the todos from API
+
+        $response = $view->render(new Response(),'login.html.twig', ['name'=>'Micha']);
+        return $response;
+    }
+
+    public function signUp() {
+        /** @var Twig $view */
+        $view = $this->container->get('view');
+
+        //Fetch the todos from API
+
+        $response = $view->render(new Response(),'register.html.twig', ['name'=>'Micha']);
+        return $response;
+    }
 }
