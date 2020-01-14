@@ -19,17 +19,20 @@ class TodoListController
     public function todos() {
         /** @var Twig $view */
         $view = $this->container->get('view');
-
+        $client = $this->container->get('http_client');
         //Fetch the todos from API
-
-        $response = $view->render(new Response(),'todo.html.twig', ['name'=>'Micha']);
+        $todos = $client->request('GET', 'todos');
+        $response = $view->render(new Response(),'todo.html.twig', ['todos' => $todos['data']]);
         return $response;
     }
 
     public function viewTodo(Request $request){
-        $idTask = $request->getAttribute("id");
+        $idTask = $request->getAttribute('id');
+        $client = $this->container->get('http_client');
+        //Fetch the todos from API
+        $todo = $client->request('GET', 'todos/' . $idTask);
         $response = new Response();
-        return $response->withJson(['id' => $idTask ], 200);
+        return $response->withJson($todo , 200);
     }
 
     public function task() {
@@ -43,12 +46,14 @@ class TodoListController
     }
 
     public function profile() {
+        //TODO: fetch username from session
+        $username = "";
         /** @var Twig $view */
         $view = $this->container->get('view');
-
-        //Fetch the todos from API
-
-        $response = $view->render(new Response(),'profile.html.twig', ['name'=>'Micha']);
+        $client = $this->container->get('http_client');
+        //Fetch the user from API
+        $user = $client->request('GET', 'users/' . $username);
+        $response = $view->render(new Response(),'profile.html.twig', ['user' => $user]);
         return $response;
     }
 }

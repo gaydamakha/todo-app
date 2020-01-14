@@ -7,6 +7,7 @@ use Slim\Http\Uri;
 use Slim\Router;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
+use GuzzleHttp\Client;
 
 return function (ContainerInterface $container) {
     $container['view'] = function (ContainerInterface $container) {
@@ -29,5 +30,18 @@ return function (ContainerInterface $container) {
         ));
 
         return $view;
+    };
+    $container['http_client'] = function(ContainerInterface $container) {
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => 'http://192.168.99.100:8001',
+            'timeout'  => 30.0,
+            'defaults' => [
+                'auth' => [],
+                'headers'  => ['Content-type' => 'application/json', 'Accept' => 'application/json'],
+            ],
+        ]);
+
+        return $client;
     };
 };

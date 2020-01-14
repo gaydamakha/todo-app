@@ -15,10 +15,20 @@ class ViewTodoAction extends TodoAction
     {
         $id = $request->get('id');
 
+        $userName = $this->getUser()->getUsername();
+
         $todo = $this->todoRepository->findTodoOfId($id);
 
         $this->logger->info("Todo of id `{$id}` was viewed.");
 
-        return $this->respond($todo, Response::HTTP_OK);
+        $authorAndAssigneeNames = [
+            $todo->getAuthor()->getUsername(),
+            $todo->getAssignee() ? $todo->getAssignee()->getUsername() : ""
+        ];
+
+        return $this->respond([
+            'todo'=>$todo,
+            'can_update' => in_array($userName, $authorAndAssigneeNames)
+        ], Response::HTTP_OK);
     }
 }
