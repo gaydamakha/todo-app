@@ -2,105 +2,175 @@
 
 {% block body %}
 
-
-
     <div class="container-fluid">
         <div class="row py-5">
             <div class="col-md-3 pl-5">
                 <h3>Liste des tâches</h3>
                 <hr>
                 <ul style="list-style-type: none">
-                    <li class="a-task"><button data-value="1">hey 1</button></li>
+                    <li class="a-task">
+                        <button class="btn text-info" data-value="1">hey 1</button>
+                    </li>
                     <hr class="mbt-02">
-                    <li class="a-task"><button data-value="2">hey 2</button></li>
+                    <li class="a-task">
+                        <button class="btn text-info" data-value="2">hey 2</button>
+                    </li>
                     <hr class="mbt-02">
-                    <li class="a-task"><button data-value="3">hey 3</button></li>
+                    <li class="a-task">
+                        <button class="btn text-info" data-value="3">hey 3</button>
+                    </li>
                     <hr class="mbt-02">
-                    <li class="a-task"><button data-value="4">hey 4</button></li>
+                    <li class="a-task">
+                        <button class="btn text-info" data-value="4">hey 4</button>
+                    </li>
                     <hr class="mbt-02">
-                    <li class="a-task"><button data-value="5">hey 5</button></li>
+                    <li class="a-task">
+                        <button class="btn text-info" data-value="5">hey 5</button>
+                    </li>
                     <hr class="mbt-02">
                 </ul>
             </div>
             <div class="col-md-6 offset-md-1">
-                <hr>
-
                 <div class="card-body">
+                {% if (isAuthor) %}
+                    <h3 class="text-center">Modifier une tâche </h3>
+                    <hr>
                     <h6 class="card-price text-left">Titre de la tâche</h6>
-                    <input type="text" id="description" name="description" class="form-control" placeholder="wash dishes...">
-                    <hr>
-                    <h6 class="card-price text-left">Description de la tâche</h6>
-                    <textarea class="form-control" id="txt-task" rows="3"></textarea>
-                    <hr>
-
-                    <div class="form-group" id="userBloc">
+                        <input type="text" id="description" name="description" class="form-control"
+                               placeholder="wash dishes...">
                         <hr>
-                        <label for="option">Utilisateur concerné</label>
-                        <select class="form-control w-50" id="userTask" name="userTask">
-                            <option value="user1">Jean Morray</option>
-                            <option value="user2">Nicolas Dupont</option>
-                            <option value="user3">Sophie Malterez</option>
-                            <option value="user4">Mickaël Frank</option>
-                        </select>
+                        <h6 class="card-price text-left">Description de la tâche</h6>
+                        <textarea class="form-control" id="txt-task" rows="3"></textarea>
+                        <hr>
+
+                        <div class="form-group" id="userBloc">
+                            <hr>
+                            <label for="option">Utilisateur concerné</label>
+                            <select class="form-control w-50" id="userTask" name="userTask">
+                                <option value="user1">Jean Morray</option>
+                                <option value="user2">Nicolas Dupont</option>
+                                <option value="user3">Sophie Malterez</option>
+                                <option value="user4">Mickaël Frank</option>
+                            </select>
+                        </div>
+
+                        <hr>
+
+                        <span class="fa-li"></span>Date d'échance:
+                        <div class="input-group" style="width: 220px">
+                            <input type="text" class="form-control datepicker" name="start" id="start">
+                            <div class="input-group-append"><span class="input-group-text"><i
+                                            class="fa fa-calendar"></i></span></div>
+                            <span class="invalid-feedback"></span>
+                        </div>
+
+                        <hr>
+
+                        <label class="ks-switch mt-2" for="done">
+                            <input type="checkbox" id="done" name="done" value="1" checked="checked">
+                            <span class="ks-slider ks-round"></span>
+                            <h6 class="pl-5 ml-3 pt-1">Fait</h6>
+
+                        </label>
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <a href="/todos" class="btn btn-block text-uppercase">Retour</a>
+                            </div>
+                            <div class="col-sm-3 offset-sm-4">
+                                <button class="btn btn-block btn-danger text-uppercase" id="btn-deleteList"
+                                        type="button">
+                                    Supprimer
+                                </button>
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-md btn-success text-uppercase" type="submit">Valider</button>
+                            </div>
+                        </div>
                     </div>
-
+                {% else %}
+                    <h4 class="card-price text-left">Titre de la tâche</h4>
+                    <h2 class="card-price text-left ml-4 mt-4">Wash dishes vertomi </h2>
+                    <span class="bg-info txt-dest">FROM: Henry</span>
+                    <span class="bg-warning txt-dest">TO: Arthur</span>
                     <hr>
-
-                    <span class="fa-li"></span>Date d'échance:
-                    <div class="input-group" style="width: 220px" >
-                        <input type="text" class="form-control datepicker" name="start" id="start">
-                        <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar"></i></span></div>
-                        <span class="invalid-feedback"></span>
+                    <h4 class="card-price text-left">Description</h4>
+                    <p class="ml-4 mt-4">Lorem Elsass ipsum id sed knack Carola pellentesque id, schpeck schnaps
+                        leverwurscht lotto-owe purus hopla Heineken non Huguette ac munster habitant Mauris Spätzle
+                        flammekueche Yo dû. hopla chambon mänele blottkopf, hopla Chulia Roberstau tchao bissame lacus
+                        Gal. s'guelt quam. météor Hans hoplageiss Chulien messti de Bischheim DNA, in, yeuh.
+                        kartoffelsalad Richard Schirmeck mollis vulputate ornare libero. </p>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <span class="fa-li"></span>Date d'échance:
+                            <div class="input-group" style="width: 220px">
+                                <input disabled type="text" class="form-control datepicker" name="start" id="start">
+                                <div class="input-group-append"><span class="input-group-text"><i
+                                                class="fa fa-calendar"></i></span></div>
+                                <span class="invalid-feedback"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <label class="ks-switch mt-4" for="done">
+                                <input disabled type="checkbox" id="done" name="done" value="1" checked="checked">
+                                <span class="ks-slider ks-round"></span>
+                                <h6 class="pl-5 ml-3 pt-1">Fait</h6>
+                            </label>
+                        </div>
                     </div>
-
                     <hr>
-
-                    <label class="ks-switch mt-2" for="done" >
-                        <input type="checkbox" id="done"  name="done" value="1" checked="checked">
-                        <span class="ks-slider ks-round"></span>
-                        <h6 class="pl-5 ml-3 pt-1">Fait</h6>
-
-                    </label>
-
-
-                    <hr>
+                    <h4 class="card-price text-left">Commentaires</h4>
 
                     <div class="row">
+                        <div class="col-md-10 bg-muted">
+                            <p class="text-muted ml-4 mt-4">Oberschaeffolsheim so Christkindelsmärik Pfourtz ! sit
+                                Pellentesque rhoncus wurscht sit Racing. barapli libero, gewurztraminer Strasbourg </p>
+                            <p class="text-right">- Chris</p>
+                            <hr>
+                        </div>
+                    </div>
+
+                    <h5 class="card-price text-left pt-5">Ajouter un commentaire</h5>
+                    <textarea class="form-control" id="txt-task" rows="3"></textarea>
+
+                    <div class="row py-5">
                         <div class="col-sm-2">
                             <a href="/todos" class="btn btn-block text-uppercase">Retour</a>
                         </div>
                         <div class="col-sm-3 offset-sm-4">
-                            <button class="btn btn-block btn-danger text-uppercase" id="btn-deleteList" type="button">
-                                Supprimer
-                            </button>
                         </div>
                         <div class="col-sm-2">
-                            <button class="btn btn-md btn-success text-uppercase" type="submit" >Valider</button>
+                            <button class="btn btn-md btn-success text-uppercase" type="submit">AJOUTER</button>
                         </div>
                     </div>
-                </div>
-            </div>
+                {% endif %}
             </div>
         </div>
     </div>
 
 
+{% endblock %}
 
+
+{% block scripts %}
     <script>
-        $(function() {
+        $(function () {
             // ini
         });
 
-        $("[data-value]").click(function(){
+        $("[data-value]").click(function () {
+            console.log("hey ! i am id: " + $(this).data("value"));
             $.ajax({
-                url: '/todos/'. $(this).data("value"),
+                url: '/todos/' + $(this).data("value"),
                 type: 'GET',
-            }).fail(function () {
-            }).done(function () {
-            });
+                dataType: 'json', // added data type
+                success: function (res) {
+                    console.log(res);
+                }
+            })
         });
 
     </script>
-
-
 {% endblock %}
