@@ -11,6 +11,9 @@ $app = new App($config);
 $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
 
+$middlewares = require __DIR__ . '/../app/middlewares.php';
+$middlewares($app);
+
 $container = $app->getContainer();
 
 $dependencies = require __DIR__ . '/../app/dependencies.php';

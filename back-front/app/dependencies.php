@@ -34,12 +34,14 @@ return function (ContainerInterface $container) {
     $container['http_client'] = function(ContainerInterface $container) {
         $client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => 'http://192.168.99.100:8001',
+            'base_uri' => 'http://192.168.99.100:8001/',//TODO: get from env
             'timeout'  => 30.0,
             'defaults' => [
-                'auth' => [],
-                'headers'  => ['Content-type' => 'application/json', 'Accept' => 'application/json'],
-            ],
+                'headers'  => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                ],
+            ]
         ]);
 
         return $client;
