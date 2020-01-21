@@ -6,7 +6,7 @@
     {% block stylesheets %}
         {% webpack_entry_css 'app' %}
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'>
-        <link href="/assets/css/bootstrap-datepicker.css" rel="stylesheet" type='text/css'>
+{#        <link href="/assets/css/bootstrap-datepicker.css" rel="stylesheet" type='text/css'>#}
     {% endblock %}
 </head>
 <body>
@@ -14,25 +14,34 @@
     <a class="navbar-brand" href="#">
         <img src="/assets/img/logo.png" width="50" height="50" class="d-inline-block align-top" alt="">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="nav navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="/profile">Mes tâches</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/todos">ToDo Space</a>
-            </li>
+            {% if is_logged|default(false) %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Mes tâches</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/todos">ToDo Space</a>
+                </li>
+            {% endif %}
         </ul>
         <ul class="nav navbar-nav ml-auto pr-4">
-            <li class="nav-item">
-                <a class="nav-link" href="/signup">S'inscrire</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/signin">Connexion</a>
-            </li>
+            {% if is_logged|default(false) %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Deconnexion</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">S'inscrire</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/signin">Connexion</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </nav>
@@ -41,9 +50,10 @@
 </body>
 </html>
 {% block javascripts %}
-    <script type="text/javascript" src="/assets/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="/assets/locales/bootstrap-datepicker.fr.min.js"></script>
-    <script type="text/javascript" src="/assets/locales/bootstrap-datepicker.fr-CH.min.js"></script>
+{#    <script type="text/javascript" src="/assets/js/bootstrap-datepicker.js"></script>#}
+{#    <script type="text/javascript" src="/assets/locales/bootstrap-datepicker.fr.min.js"></script>#}
+{#    <script type="text/javascript" src="/assets/locales/bootstrap-datepicker.fr-CH.min.js"></script>#}
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{#    {% webpack_entry_js 'app' %}#}
     {% block scripts %}{% endblock %}
 {% endblock %}

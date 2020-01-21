@@ -227,8 +227,8 @@ class User implements JsonSerializable, UserInterface
         return [
             'id' => $this->id,
             'username' => $this->username,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
+            'firstname' => $this->firstName,
+            'lastname' => $this->lastName,
             'created_todos' => $this->getCreatedTodos(),
             'assigned_todos' => $this->getAssignedTodos()
         ];

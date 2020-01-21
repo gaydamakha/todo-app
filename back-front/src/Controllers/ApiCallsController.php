@@ -4,12 +4,12 @@
 namespace App\Controllers;
 
 
+use Adbar\Session;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request as ServerRequest;
 use Slim\Http\Response;
-use Slim\Views\Twig;
 
 class ApiCallsController
 {
@@ -26,10 +26,18 @@ class ApiCallsController
         $idTask = $request->getAttribute('id');
         /** @var Client $client */
         $client = $this->container->get('http_client');
-        //Fetch the todos from API
-        $todo = $client->request('GET', 'todos/' . $idTask);
-        $response = new Response();
-        return $response->withJson($todo, 200);
+        /** @var Session $session */
+        $session = $this->container->get('session');
+        //Fetch the todo from API
+        $response = $client->request('GET', 'api/todos/' . $idTask, [
+            'headers'  => [
+                'Authorization' => $session->get('token')
+            ]
+        ]);
+        //TODO: treat error (todo not found)
+        $todo = json_decode($response->getBody(),true)['data'];
+
+        return (new Response())->withJson($todo, 200);
     }
 
     public function signin(ServerRequest $request)
@@ -38,8 +46,8 @@ class ApiCallsController
         $password = $request->getParsedBodyParam('password');
         /** @var Client $client */
         $client = $this->container->get('http_client');
-//        /** @var Twig $view */
-//        $view = $this->container->get('view');
+        /** @var Session $session */
+        $session = $this->container->get('session');
 
         $request = new Request('POST', '/api/login_check', [],
             json_encode([
@@ -49,17 +57,16 @@ class ApiCallsController
         );
 
         $response = $client->send($request);
+
         if (200 === $response->getStatusCode()) {
+            $session->set('username', $username);
+            $session->set('token', 'Bearer '. json_decode($response->getBody(), true)['token']);
+            $session->set('is_logged', true);
             return (new Response())
-                ->withRedirect('/signin', 301)
-                ->withHeader('Access-Control-Allow-Origin', 'http://192.168.99.100:8000/')
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
-                ->withHeader('Authorization', "Bearer ". json_decode($response->getBody(),true)['token']);
-        } else {
-            //TODO: redirect to signin with flash message
+                ->withRedirect('/todos', 301);
         }
 
+        //TODO: redirect to signin with flash error message (text from json response)
         return new Response();
     }
 }

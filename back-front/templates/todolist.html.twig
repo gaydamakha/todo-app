@@ -1,0 +1,8 @@
+{% block todolist %}
+    <ul style="list-style-type: none">
+        {% for todo in todos %}
+            <li class="a-task"><button data-value="{{ todo.id }}">{{ todo.title }}</button></li>
+            <hr class="mbt-02">
+        {% endfor %}
+    </ul>
+{% endblock %}

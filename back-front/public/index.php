@@ -12,7 +12,7 @@ $routes = require __DIR__ . '/../app/routes.php';
 $routes($app);
 
 $middlewares = require __DIR__ . '/../app/middlewares.php';
-$middlewares($app);
+$middlewares($app, $config['settings']);
 
 $container = $app->getContainer();
 

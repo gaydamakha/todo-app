@@ -1,4 +1,5 @@
-const path = require("path");
+const webpack = require('webpack');
+const path = require('path');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -10,7 +11,7 @@ module.exports = {
     mode: 'development',
     output: {
         path: path.resolve(__dirname, 'public/build/'),
-        publicPath: "/build/",
+        publicPath: "./build/",
         filename: '[name].js'
     },
     resolve: {
@@ -19,7 +20,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.module\.s(a|c)ss$/,
+                // test: /\.module\.s([ac])ss$/,
+                test: /\.module\.(css|sass|scss)$/,
                 loader: [
                     isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
                     {
@@ -35,11 +37,14 @@ module.exports = {
                                 sourceMap: isDevelopment
                             }
                     }
-                ]
+                ],
+                exclude: /node_modules/,
             },
             {
-                test: /\.s(a|c)ss$/,
-                exclude: /\.module.(s(a|c)ss)$/,
+                // test: /\.s([ac])ss$/,
+                test: /\.(css|sass|scss)$/,
+                // exclude: /\.module.(s([ac])ss)$/,
+                exclude: /\.module\.(css|sass|scss)$/,
                 loader: [
                     isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
                     'css-loader',
@@ -50,7 +55,18 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
+            {
+                test: /.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {
+                        name: '[name].[ext]',
+                        outputPath: '../fonts/',
+                        publicPath: '../static/fonts'
+                    }
+                }]
+            },
         ],
     },
     plugins: [
@@ -58,6 +74,12 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: isDevelopment ? '[name].css' : '[name].[hash].css',
             chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
+        }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            jquery: 'jquery',
+            // 'window.jQuery': 'jquery'
         })
     ]
 };

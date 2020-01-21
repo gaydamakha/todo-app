@@ -1,5 +1,6 @@
 <?php
 
+use Adbar\Session;
 use Fullpipe\TwigWebpackExtension\WebpackExtension;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Environment;
@@ -45,5 +46,10 @@ return function (ContainerInterface $container) {
         ]);
 
         return $client;
+    };
+    $container['session'] = function (ContainerInterface $container) {
+        return new Session(
+            $container->get('settings')['session']['namespace']
+        );
     };
 };

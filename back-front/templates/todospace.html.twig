@@ -6,14 +6,9 @@
             <div class="col-md-3 pl-5">
                 <h3>Liste des tâches</h3>
                 <hr>
-                <ul style="list-style-type: none">
-                    {% for todo in todos %}
-                    <li class="a-task"><button data-value="{{ todo.id }}">{{ todo.title }}</button></li>
-                    <hr class="mbt-02">
-                    {% endfor %}
-                </ul>
+                {% include 'todolist.html.twig' with todos %}
             </div>
-            <div class="col-md-6 offset-md-1">
+            <div id="" class="col-md-6 offset-md-1">
                 <hr>
 
                 <div class="card-body">
@@ -28,10 +23,9 @@
                         <hr>
                         <label for="option">Utilisateur concerné</label>
                         <select class="form-control w-50" id="userTask" name="userTask">
-                            <option value="user1">Jean Morray</option>
-                            <option value="user2">Nicolas Dupont</option>
-                            <option value="user3">Sophie Malterez</option>
-                            <option value="user4">Mickaël Frank</option>
+                            {% for user in users %}
+                                <option value={{ user.username }}>{{ user.firstname }} {{ user.lastname }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
@@ -47,10 +41,9 @@
                     <hr>
 
                     <label class="ks-switch mt-2" for="done" >
-                        <input type="checkbox" id="done"  name="done" value="1" checked="checked">
+                        <input type="checkbox" id="done"  name="done" value="1" >
                         <span class="ks-slider ks-round"></span>
                         <h6 class="pl-5 ml-3 pt-1">Fait</h6>
-
                     </label>
 
 
@@ -74,9 +67,8 @@
             </div>
         </div>
     </div>
-
-
-
+{% endblock %}
+{% block scripts %}
     <script>
         $(function() {
             // ini
@@ -84,14 +76,13 @@
 
         $("[data-value]").click(function(){
             $.ajax({
-                url: '/todos/'. $(this).data("value"),
+                url: "/todos/"  + $(this).data("value"),
                 type: 'GET',
             }).fail(function () {
-            }).done(function () {
+            }).done(function (result) {
+                alert(Object.keys(result));
             });
         });
 
     </script>
-
-
 {% endblock %}

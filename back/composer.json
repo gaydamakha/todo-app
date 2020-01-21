@@ -22,7 +22,7 @@
         "symfony/security-bundle": "4.4.*",
         "symfony/serializer-pack": "*",
         "symfony/validator": "4.4.*",
-        "symfony/yaml": "4.4.*",
+        "symfony/yaml": "4.4.*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
