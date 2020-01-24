@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row py-5">
+            <div class="col-md-3 pl-5">
+                <h3>Liste des tâches</h3>
+                <hr>
+                {% include 'blocks/todolist.html.twig' with todos %}
+            </div>
+            <div class="col-md-6 offset-md-1">
+                <h3 class="card-price text-left">L'ajout d'une tâche</h3>
+                <hr>
+                <form id="addTodoForm" method="post" action="/todos">
+                    {% include 'blocks/addtodo.html.twig' with users %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

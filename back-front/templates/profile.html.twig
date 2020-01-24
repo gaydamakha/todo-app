@@ -6,12 +6,12 @@
             <div class="col-md-5 pl-5">
                 <h3>Liste des tâches crées</h3>
                 <hr>
-                {% include 'todolist.html.twig' with { 'todos': user.created_todos } %}
+                {% include 'blocks/todolist.html.twig' with { 'todos': user.created_todos } %}
             </div>
             <div class="col-md-5 pl-5">
                 <h3>Liste des tâches assignées</h3>
                 <hr>
-                {% include 'todolist.html.twig' with { 'todos': user.assigned_todos } %}
+                {% include 'blocks/todolist.html.twig' with { 'todos': user.assigned_todos } %}
             </div>
         </div>
     </div>

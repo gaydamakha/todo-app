@@ -1,0 +1,102 @@
+{% block viewtodo %}
+<div class="card-body">
+    {% if can_update %} {# Update todo #}
+    <h6 class="card-price text-left">Titre de la tâche</h6>
+    <input type="text" id="title" name="title" class="form-control" value="{{ todo.title }}">
+    <hr>
+    <h6 class="card-price text-left">Description de la tâche</h6>
+    <textarea class="form-control" id="description" name="description"
+              rows="3">{{ todo.description }}</textarea>
+    <hr>
+
+    <h6 class="card-price text-left">Auteur</h6>
+    <span id="author" name="author" rows="3">{{ todo.author_username }}</span>
+    <hr>
+
+    <div class="form-group" id="userBloc">
+        <label for="option">Utilisateur concerné</label>
+        <select class="form-control w-50" id="assignee" name="assignee">
+            <option value=""></option> {# Empty option#}
+            {% for user in users %}
+                {% if user.username == todo.assignee_username %}
+                    <option value="{{ user.username }}"
+                            selected>{{ user.firstname }} {{ user.lastname }}</option>
+                {% else %}
+                    <option value="{{ user.username }}">{{ user.firstname }} {{ user.lastname }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    <hr>
+
+    <span class="fa-li"></span>Date d'échance:
+    <div class="input-group" style="width: 220px">
+        <input type="text" class="form-control datepicker" name="due_date" id="due_date"
+               value="{{ todo.due_date }}">
+        <div class="input-group-append"><span class="input-group-text"><i class="fa fa-calendar"></i></span>
+        </div>
+        <span class="invalid-feedback"></span>
+    </div>
+
+    <hr>
+
+    <label class="ks-switch mt-2" for="done">
+        <input type="checkbox" id="done" name="done"
+        {% if todo.done %}
+            checked
+        {% endif %}>
+        <span class="ks-slider ks-round"></span>
+        <h6 class="pl-5 ml-3 pt-1">Fait</h6>
+    </label>
+
+    {% else %} {# View todo #}
+        <h6 class="card-price text-left">Titre de la tâche</h6>
+        <span id="title" name="title">{{ todo.title }}</span>
+        <hr>
+        <h6 class="card-price text-left">Description de la tâche</h6>
+        <span id="description" name="description" rows="3">{{ todo.description }}</span>
+        <hr>
+        <h6 class="card-price text-left">Auteur</h6>
+        <span id="author" name="author" rows="3">{{ todo.author_username }}</span>
+        <hr>
+        {% if todo.assignee_username %}
+        <h6 class="card-price text-left">Utilisateur concerné</h6>
+        <span id="assignee" name="assignee" rows="3">{{ todo.assignee_username }}</span>
+        <hr>
+        {% endif %}
+        {% if todo.due_date %}
+        <h6 class="card-price text-left">Date d'échance:</h6>
+        <span>{{ todo.due_date }}</span>
+        <hr>
+        {% endif %}
+
+        <label class="ks-switch mt-2" for="done">
+            <input type="checkbox" id="done" name="done" disabled
+            {% if todo.done %}
+                checked
+            {% endif %}
+            >
+            <span class="ks-slider ks-round"></span>
+            <h6 class="pl-5 ml-3 pt-1">Fait</h6>
+        </label>
+    {% endif %}
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-2">
+            <a href="/todos" class="btn btn-block btn-secondary text-uppercase">Retour</a>
+        </div>
+        {% if can_update %}
+            <div class="col-sm-3 offset-sm-4">
+                <a href="/todos/{{ todo.id }}/delete" class="btn btn-block btn-danger text-uppercase" id="btn-deleteList" type="button">
+                    Supprimer
+                </a>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-block btn-success text-uppercase" type="submit"> Mettre à jour</button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

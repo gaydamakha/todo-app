@@ -27,10 +27,14 @@ delete_todo: #done
   path: /todos/created/{id}
   methods: [DELETE]
   controller: App\Application\Actions\Todo\DeleteTodoAction::action
-assign_todo: #done
+assign_todo: #TODO - remove
   path: /todos/{id}/assign
   methods: [PATCH]
   controller: App\Application\Actions\Todo\AssignTodoAction::action
+update_todo: #TODO
+  path: /todos/{id}/update
+  methods: [PATCH]
+  controller: App\Application\Actions\Todo\UpdateTodoAction::action
 comment_todo: #todo: mapping problem
   path: /todos/{id}/comment
   methods: [POST]

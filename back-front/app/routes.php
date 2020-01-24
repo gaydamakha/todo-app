@@ -1,7 +1,7 @@
 <?php
 
 use Adbar\Session;
-use App\Controllers\ApiCallsController;
+use App\Controllers\SigninController;
 use App\Controllers\TodoListController;
 use App\Middlewares\AuthMiddleware;
 use Slim\App;
@@ -13,11 +13,15 @@ return function (App $app) {
         $app->get('/', function () {
             return (new Response())->withRedirect('/signin');
         });
-        $app->get('/todos', TodoListController::class . ':todos');
+        $app->get('/todos', TodoListController::class . ':addTodoView');
+
+        $app->post('/todos', TodoListController::class . ':addTodo');
 
         $app->get('/profile', TodoListController::class . ':profile');
 
-        $app->get('/todos/{id}', ApiCallsController::class . ':viewTodo');
+        $app->get('/todos/{id}', TodoListController::class . ':viewTodo');
+
+        $app->post('/todos/{id}/assign', TodoListController::class . ':assignTodo');
     })->add(new AuthMiddleware());
 
 
@@ -29,7 +33,7 @@ return function (App $app) {
         }
         return  $c->get('view')->render(new Response(), 'signin.html.twig');
     });
-    $app->post('/signin', ApiCallsController::class . ':signin');
+    $app->post('/signin', SigninController::class . ':signin');
 
     $app->get('/logout', function() use ($c) {
         /** @var Session $session */

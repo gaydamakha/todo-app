@@ -1,0 +1,10 @@
+{% block todolist %}
+    <ul style="list-style-type: none">
+        {% for todo in todos %}
+            <li class="a-task">
+                <a href="/todos/{{ todo.id }}">
+                    <button>{{ todo.title }}</button>
+                </a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
