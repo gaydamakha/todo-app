@@ -6,7 +6,7 @@ return [
         'session' => [
             // Session cookie settings
             'name'           => 'slim_session',
-            'lifetime'       => 24,
+            'lifetime'       => 60,
             'path'           => '/',
             'domain'         => null,
             'secure'         => false,

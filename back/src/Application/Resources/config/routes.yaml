@@ -24,7 +24,7 @@ view_todo: #done
   methods: [GET]
   controller: App\Application\Actions\Todo\ViewTodoAction::action
 delete_todo: #done
-  path: /todos/created/{id}
+  path: /todos/{id}
   methods: [DELETE]
   controller: App\Application\Actions\Todo\DeleteTodoAction::action
 assign_todo: #TODO - remove
@@ -32,7 +32,7 @@ assign_todo: #TODO - remove
   methods: [PATCH]
   controller: App\Application\Actions\Todo\AssignTodoAction::action
 update_todo: #TODO
-  path: /todos/{id}/update
+  path: /todos/{id}
   methods: [PATCH]
   controller: App\Application\Actions\Todo\UpdateTodoAction::action
 comment_todo: #todo: mapping problem

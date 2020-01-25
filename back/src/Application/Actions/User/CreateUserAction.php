@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Actions\User;
 
 use App\Application\Actions\PostActionInterface;
@@ -41,8 +40,14 @@ class CreateUserAction extends UserAction implements PostActionInterface
     {
         $constraints = new Assert\Collection([
             'data' => new Assert\Collection([
-                'username' => new Assert\Email(),
-                'password' => new Assert\Length(['min' => 8]),
+                'username' => [
+                    new Assert\NotBlank(),
+                    new Assert\Email()
+                ],
+                'password' => [
+                    new Assert\NotBlank(),
+                    new Assert\Length(['min' => 8])
+                ],
                 'firstname' => [
                     new Assert\NotBlank(),
                     new Assert\Type(['type' => 'string'])

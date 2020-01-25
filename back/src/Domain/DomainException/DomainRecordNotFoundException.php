@@ -5,4 +5,5 @@ namespace App\Domain\DomainException;
 
 class DomainRecordNotFoundException extends DomainException
 {
+    public $message = "This record is not found.";
 }

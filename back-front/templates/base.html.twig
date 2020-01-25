@@ -5,12 +5,12 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
         {% webpack_entry_css 'app' %}
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'>
-{#        <link href="/assets/css/bootstrap-datepicker.css" rel="stylesheet" type='text/css'>#}
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet"
+              type='text/css'>
     {% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
     <a class="navbar-brand" href="#">
         <img src="/assets/img/logo.png" width="50" height="50" class="d-inline-block align-top" alt="">
     </a>
@@ -19,13 +19,13 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="nav navbar-nav mr-auto">
+        <ul class="nav navbar-nav mr-auto pr-4">
             {% if is_logged|default(false) %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile">Mes tâches</a>
+                    <a class="nav-link text-center" href="/profile">Mes tâches</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/todos">ToDo Space</a>
+                    <a class="nav-link text-center" href="/todos">ToDo Space</a>
                 </li>
             {% endif %}
             {% block menu_buttons_extension %}
@@ -33,14 +33,14 @@
         </ul>
         <ul class="nav navbar-nav ml-auto pr-4">
             {% if is_logged|default(false) %}
-                <li class="nav-item">
+                <li class="nav-item text-center">
                     <a class="nav-link" href="/logout">Deconnexion</a>
                 </li>
             {% else %}
-                <li class="nav-item">
+                <li class="nav-item text-center">
                     <a class="nav-link" href="/signup">S'inscrire</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item text-center">
                     <a class="nav-link" href="/signin">Connexion</a>
                 </li>
             {% endif %}
@@ -52,10 +52,23 @@
 </body>
 </html>
 {% block javascripts %}
-{#    <script type="text/javascript" src="/assets/js/bootstrap-datepicker.js"></script>#}
-{#    <script type="text/javascript" src="/assets/locales/bootstrap-datepicker.fr.min.js"></script>#}
-{#    <script type="text/javascript" src="/assets/locales/bootstrap-datepicker.fr-CH.min.js"></script>#}
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-{#        {% webpack_entry_js 'app' %}#}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"
+            integrity="sha256-JIBDRWRB0n67sjMusTy4xZ9L09V8BINF0nd/UUUOi48=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.fr.min.js"
+            integrity="sha256-IRibTuqtDv2uUUN/0iTrhnrvvygNczxRRAbPgCbs+LE=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.fr-CH.min.js"
+            integrity="sha256-CF6rbgxIu8vS5jj2Z9Qh1QbG5Rk08/at46dTqDYwXd8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    {% webpack_entry_js 'app' %}
     {% block scripts %}{% endblock %}
+    <script>
+        $(function () {
+            $('#datepicker').datepicker({
+                format: "dd/mm/yyyy"
+            });
+        });
+    </script>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Application\Actions\User;
 
+use App\Domain\DomainException\DomainForbiddenException;
 use App\Domain\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class DeleteUserAction extends UserAction
 
         if ($username !== $currentUser->getUsername()) {
             //TODO: 401 instead of 403?
-            throw $this->createAccessDeniedException("You're not authorized to perform this action");
+            throw new DomainForbiddenException();
         }
 
         $user = $this->userRepository->deleteUser($username);

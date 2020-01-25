@@ -1,4 +1,7 @@
 {% extends 'base.html.twig' %}
+{% block title %}
+    {{ todo.title }}
+{% endblock %}
 {% block menu_buttons_extension %}
     <li class="nav-item">
         <a class="nav-link" href="/todos">L'ajout d'une tâche</a>
@@ -7,7 +10,7 @@
 {% block body %}
     <div class="container-fluid">
         <div class="row py-5">
-            <div class="col-md-3 pl-5">
+            <div class="col-md-3 offset-md-1">
                 <h3>Liste des tâches</h3>
                 <hr>
                 {% include 'blocks/todolist.html.twig' with todos %}
@@ -19,10 +22,33 @@
                     </h3>
                     <hr>
                 {% endif %}
-                <form id="viewTodoForm" method="post" action="/todos/{{ todo.id }}/assign">
-                    {% include 'blocks/viewtodo.html.twig' with {'todo': todo, 'can_update':can_update} %}
-                </form>
+                <div class="card-body">
+                    {% if can_update %} {# Update todo #}
+                        {% include 'blocks/update_todo.html.twig' with todo %}
+                    {% else %}
+                        {% include 'blocks/view_todo.html.twig' with {'todo': todo, 'can_update':can_update} %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $('#btn-deleteList').click(function (e) {
+            e.preventDefault();
+            var todoId = '{{ todo.id }}';
+
+            $.ajax({
+                url: "/todos/" + todoId,
+                type: 'DELETE',
+                success: function (data, textStatus, xhr) {
+                    window.location.href = xhr.getResponseHeader('Location');
+                },
+                error: function(xhr,textStatus,errorThrown) {
+                    alert(xhr.responseText);
+                }
+            });
+        });
+    </script>
 {% endblock %}

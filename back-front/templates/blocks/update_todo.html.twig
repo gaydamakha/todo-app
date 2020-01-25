@@ -1,0 +1,72 @@
+{% block update_todo %}
+    <form id="viewTodoForm" method="post" action="/todos/{{ todo.id }}/assign">
+        <h6 class="card-price text-left">Titre de la tâche</h6>
+        <input type="text" id="title" name="title" class="form-control" value="{{ todo.title }}">
+        <hr>
+
+        <h6 class="card-price text-left">Description de la tâche</h6>
+        <textarea class="form-control" id="description" name="description"
+                  rows="3">{{ todo.description }}</textarea>
+        <hr>
+
+        <h6 class="card-price text-left">Auteur</h6>
+        <span id="author" name="author" rows="3">{{ todo.author_username }}</span>
+        <hr>
+
+        <div class="form-group" id="userBloc">
+            <label for="option"><h6 class="card-price text-left">Utilisateur concerné</h6></label>
+            <select class="form-control w-50" id="assignee" name="assignee">
+                <option value=""></option> {# Empty option#}
+                {% for user in users %}
+                    {% if user.username == todo.assignee_username %}
+                        <option value="{{ user.username }}"
+                                selected>{{ user.firstname }} {{ user.lastname }}</option>
+                    {% else %}
+                        <option value="{{ user.username }}">{{ user.firstname }} {{ user.lastname }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <hr>
+
+        <h6 class="card-price text-left">Date d'échance:</h6>
+        <div class="input-group date" id="datepicker" style="width: 220px">
+            <input type="text" class="form-control" value="{{ todo.due_date }}" id="due_date" name="due_date">
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                </span>
+            </div>
+        </div>
+
+        <hr>
+
+        <label class="ks-switch mt-2" for="done">
+            <input type="checkbox" id="done" name="done"
+                    {% if todo.done %}
+            checked
+                    {% endif %}>
+            <span class="ks-slider ks-round"></span>
+            <h6 class="pl-5 ml-3 pt-1">Fait</h6>
+        </label>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <a href="/todos" class="btn btn-block btn-secondary text-uppercase">Retour</a>
+            </div>
+            <div class="col-lg-3 offset-lg-2">
+                <button class="btn btn-block btn-danger text-uppercase"
+                        id="btn-deleteList" type="button">
+                    Supprimer
+                </button>
+            </div>
+            <div class="col-lg-4">
+                <button class="btn btn-block btn-success text-uppercase" type="submit"> Mettre à jour
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

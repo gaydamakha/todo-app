@@ -16,7 +16,24 @@
         </div>
         <hr>
     </div>
-
+    {% if flash_error %}
+        <div class="container pt-5">
+            <div class="row justify-content-center my-auto">
+                <div class="alert alert-danger" role="alert">
+                    {{ flash_error }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {% if flash_success %}
+        <div class="container pt-5">
+            <div class="row justify-content-center my-auto">
+                <div class="alert alert-success" role="alert">
+                    {{ flash_success}}
+                </div>
+            </div>
+        </div>
+    {% endif %}
     <div class="container pt-5">
         <div class="row justify-content-center my-auto">
             <div class="col-sm-6">

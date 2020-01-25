@@ -1,18 +1,38 @@
 {% extends 'base.html.twig' %}
-
+{% block title %}
+    Nouvelle tâche
+{% endblock %}
 {% block body %}
     <div class="container-fluid">
         <div class="row py-5">
-            <div class="col-md-3 pl-5">
+            <div class="col-md-3 offset-md-1">
                 <h3>Liste des tâches</h3>
                 <hr>
                 {% include 'blocks/todolist.html.twig' with todos %}
             </div>
             <div class="col-md-6 offset-md-1">
+                {% if flash_error %}
+                    <div class="container pt-5">
+                        <div class="row justify-content-center my-auto">
+                            <div class="alert alert-danger" role="alert">
+                                {{ flash_error }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if flash_success %}
+                    <div class="container pt-5">
+                        <div class="row my-auto">
+                            <div class="alert alert-success" role="alert">
+                                {{ flash_success}}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
                 <h3 class="card-price text-left">L'ajout d'une tâche</h3>
                 <hr>
                 <form id="addTodoForm" method="post" action="/todos">
-                    {% include 'blocks/addtodo.html.twig' with users %}
+                    {% include 'blocks/add_todo.html.twig' with users %}
                 </form>
             </div>
         </div>

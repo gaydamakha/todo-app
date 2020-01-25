@@ -3,7 +3,7 @@
         {% for todo in todos %}
             <li class="a-task">
                 <a href="/todos/{{ todo.id }}">
-                    <button>{{ todo.title }}</button>
+                    {{ todo.title }}
                 </a></li>
         {% endfor %}
     </ul>

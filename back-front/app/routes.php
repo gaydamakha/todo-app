@@ -6,6 +6,7 @@ use App\Controllers\TodoListController;
 use App\Middlewares\AuthMiddleware;
 use Slim\App;
 use Slim\Http\Response;
+use Slim\Http\Request as ServerRequest;
 
 return function (App $app) {
     $c = $app->getContainer();
@@ -22,20 +23,29 @@ return function (App $app) {
         $app->get('/todos/{id}', TodoListController::class . ':viewTodo');
 
         $app->post('/todos/{id}/assign', TodoListController::class . ':assignTodo');
+
+        $app->delete('/todos/{id}', TodoListController::class . ':deleteTodo');
     })->add(new AuthMiddleware());
 
 
-    $app->get('/signin', function() use ($c) {
+    $app->get('/signin', function () use ($c) {
         /** @var Session $session */
         $session = $c->get('session');
+        $flashError = $session->get('flash_error')['0'];
+        $flashSuccess = $session->get('flash_success')[0];
+        $session->delete(['flash_error', 'flash_success']);
         if ($session->get('is_logged')) {
             return (new Response())->withRedirect('/todos');
         }
-        return  $c->get('view')->render(new Response(), 'signin.html.twig');
+
+        return $c->get('view')->render(new Response(), 'signin.html.twig', [
+            'flash_error' => $flashError,
+            'flash_success' => $flashSuccess
+        ]);
     });
     $app->post('/signin', SigninController::class . ':signin');
 
-    $app->get('/logout', function() use ($c) {
+    $app->get('/logout', function () use ($c) {
         /** @var Session $session */
         $session = $c->get('session');
         $session->delete('token');
@@ -43,8 +53,20 @@ return function (App $app) {
         $session->set('is_logged', false);
         return (new Response())->withRedirect('/signin', 301);
     });
-    $app->get('/signup', function() use ($c) {
+
+    $app->get('/signup', function (ServerRequest $request) use ($c) {
         /** @var Session $session */
-        return $c->get('view')->render(new Response(), 'signup.html.twig');
+        $session = $c->get('session');
+
+        $flashError = $session->get('flash_error')[0];
+        $flashSuccess = $session->get('flash_success')[0];
+
+        $session->delete(['flash_error', 'flash_success']);
+        return $c->get('view')->render(new Response(), 'signup.html.twig', [
+            'flash_error' => $flashError,
+            'flash_success' => $flashSuccess
+        ]);
     });
+
+    $app->post('/signup', SigninController::class . ':signup');
 };

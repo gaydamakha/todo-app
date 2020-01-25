@@ -1,0 +1,40 @@
+{% block addtodo %}
+    <div class="card-body">
+        <h6 class="card-price text-left">Titre de la tâche</h6>
+        <input type="text" id="title" name="title" class="form-control">
+        <hr>
+        <h6 class="card-price text-left">Description de la tâche</h6>
+        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        <hr>
+
+        <div class="form-group" id="userBloc">
+            <label for="option">Utilisateur concerné</label>
+            <select class="form-control w-50" id="assignee" name="assignee">
+                <option value=""></option> {# Empty option#}
+                {% for user in users %}
+                    <option value={{ user.username }}>{{ user.firstname }} {{ user.lastname }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <hr>
+
+        <span class="fa-li"></span>Date d'échance:
+        <div class="input-group date" id="datepicker" style="width: 220px">
+            <input type="text" class="form-control" id="due_date" name="due_date">
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                </span>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <button class="btn btn-lg btn-success text-uppercase" type="submit">Valider</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

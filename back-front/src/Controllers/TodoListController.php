@@ -14,11 +14,13 @@ class TodoListController
     protected $container;
 
     // constructor receives container instance
-    public function __construct(ContainerInterface $container) {
+    public function __construct(ContainerInterface $container)
+    {
         $this->container = $container;
     }
 
-    public function addTodoView(ServerRequest $request) {
+    public function addTodoView(ServerRequest $request)
+    {
         /** @var Twig $view */
         $view = $this->container->get('view');
         /** @var Client $client */
@@ -28,25 +30,30 @@ class TodoListController
         //Fetch the todos from API
         //TODO: treat possible errors
         $response = $client->request('GET', 'api/todos', [
-            'headers'  => [
-                'Authorization'=> $session->get('token')
+            'headers' => [
+                'Authorization' => $session->get('token')
             ]
         ]);
 
         $todos = json_decode($response->getBody(), true)['data'];
 
         $response = $client->request('GET', 'api/users', [
-            'headers'  => [
-                'Authorization'=> $session->get('token')
+            'headers' => [
+                'Authorization' => $session->get('token')
             ]
         ]);
 
         $users = json_decode($response->getBody(), true)['data'];
 
-        return $view->render(new Response(),'todospace_add.html.twig', [
+        $flashError = $session->get('flash_error')['0'];
+        $flashSuccess = $session->get('flash_success')[0];
+        $session->delete(['flash_error', 'flash_success']);
+        return $view->render(new Response(), 'todospace_add.html.twig', [
             'is_logged' => $session->get('is_logged'),//Normally true
             'todos' => $todos,
-            'users' => $users
+            'users' => $users,
+            'flash_success' => $flashSuccess,
+            'flash_error' => $flashError
         ]);
     }
 
@@ -70,7 +77,8 @@ class TodoListController
         if (!empty($dueDate)) {
             $data['due_date'] = $dueDate;
         }
-        $body = json_encode(['data' => $data]);
+
+        $body = json_encode(['data' => $data], JSON_UNESCAPED_SLASHES);
 
         try {
             $client->request('POST', 'api/todos', [
@@ -81,9 +89,9 @@ class TodoListController
                 'body' => $body
             ]);
         } catch (\Exception $e) {
-            return (new Response())->withJson($e->getResponse()->getBody()->getContents(), 400);
+            return (new Response())->withJson($e->getResponse()->getBody()->getContents(), $e->getCode());
         }
-        //TODO: add flash about success
+        $session->add('flash_success', 'Created!');
         return (new Response())->withRedirect("/todos", 301);
     }
 
@@ -99,7 +107,7 @@ class TodoListController
         $body = json_encode(['data' => $data]);
 
         try {
-            $client->request('PATCH', 'api/todos/'. $idTask.'/assign', [
+            $client->request('PATCH', 'api/todos/' . $idTask . '/assign', [
                 'headers' => [
                     'Authorization' => $session->get('token'),
                     'Content-Type' => 'application/json'
@@ -110,7 +118,7 @@ class TodoListController
             return (new Response())->withJson($e->getResponse()->getBody()->getContents(), 400);
         }
         //TODO: add flash about success
-        return (new Response())->withRedirect("/todos/".$idTask, 200);
+        return (new Response())->withRedirect("/todos/" . $idTask, 200);
     }
 
     public function viewTodo(ServerRequest $request)
@@ -134,22 +142,22 @@ class TodoListController
         $canUpdate = $data['can_update'];
 
         $response = $client->request('GET', 'api/todos', [
-            'headers'  => [
-                'Authorization'=> $session->get('token')
+            'headers' => [
+                'Authorization' => $session->get('token')
             ]
         ]);
 
         $todos = json_decode($response->getBody(), true)['data'];
 
         $response = $client->request('GET', 'api/users', [
-            'headers'  => [
-                'Authorization'=> $session->get('token')
+            'headers' => [
+                'Authorization' => $session->get('token')
             ]
         ]);
 
         $users = json_decode($response->getBody(), true)['data'];
 
-        return $view->render(new Response(),'todospace_view.html.twig', [
+        return $view->render(new Response(), 'todospace_view.html.twig', [
             'is_logged' => $session->get('is_logged'),//Normally true
             'todos' => $todos,
             'users' => $users,
@@ -158,7 +166,8 @@ class TodoListController
         ]);
     }
 
-    public function profile() {
+    public function profile()
+    {
         /** @var Twig $view */
         $view = $this->container->get('view');
         /** @var Client $client */
@@ -168,14 +177,36 @@ class TodoListController
 
         $username = $session->get('username');
         //Fetch the user from API
-        $response = $client->request('GET', 'api/users/' . $username, ['headers'  => [
-            'Authorization'=> $session->get('token')
+        $response = $client->request('GET', 'api/users/' . $username, ['headers' => [
+            'Authorization' => $session->get('token')
         ]]);
         $user = json_decode($response->getBody(), true)['data'];
 
-        return $view->render(new Response(),'profile.html.twig', [
+        return $view->render(new Response(), 'profile.html.twig', [
             'is_logged' => $session->get('is_logged'),//Normally true
             'user' => $user
         ]);
+    }
+
+    public function deleteTodo(ServerRequest $request)
+    {
+        /** @var Client $client */
+        $client = $this->container->get('http_client');
+        /** @var Session $session */
+        $session = $this->container->get('session');
+        $idTask = $request->getAttribute('id');
+
+        try {
+            $client->request('DELETE', 'api/todos/' . $idTask, [
+                'headers' => [
+                    'Authorization' => $session->get('token')
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return (new Response())->withJson($e->getResponse()->getBody()->getContents(), 400);
+        }
+
+        //TODO: add flash about success
+        return (new Response())->withRedirect("/todos", 204);
     }
 }

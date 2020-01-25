@@ -151,7 +151,9 @@ class User implements JsonSerializable, UserInterface
             throw new InvalidAuthorException();
         }
         //desassign this todo from the assignee
-        $todo->getAssignee()->removeAssignedTodo($todo);
+        if ($todo->getAssignee()) {
+            $todo->getAssignee()->removeAssignedTodo($todo);
+        }
 
         return $this->createdTodos->removeElement($todo);
     }

@@ -1,0 +1,42 @@
+{% block view_todo %}
+<div>
+    <h6 class="card-price text-left">Titre de la tâche</h6>
+    <span id="title" name="title">{{ todo.title }}</span>
+    <hr>
+    {% if todo.description %}
+        <h6 class="card-price text-left">Description de la tâche</h6>
+        <span id="description" name="description" rows="3">{{ todo.description }}</span>
+        <hr>
+    {% endif %}
+    <h6 class="card-price text-left">Auteur</h6>
+    <span id="author" name="author" rows="3">{{ todo.author_username }}</span>
+    <hr>
+    {% if todo.assignee_username %}
+        <h6 class="card-price text-left">Utilisateur concerné</h6>
+        <span id="assignee" name="assignee" rows="3">{{ todo.assignee_username }}</span>
+        <hr>
+    {% endif %}
+    {% if todo.due_date %}
+        <h6 class="card-price text-left">Date d'échance:</h6>
+        <span>{{ todo.due_date }}</span>
+        <hr>
+    {% endif %}
+
+    <label class="ks-switch mt-2" for="done">
+        <input type="checkbox" id="done" name="done" disabled
+                {% if todo.done %}
+                    checked
+                {% endif %}
+        >
+        <span class="ks-slider ks-round"></span>
+        <h6 class="pl-5 ml-3 pt-1">Fait</h6>
+    </label>
+    <hr>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <a href="/todos" class="btn btn-block btn-secondary text-uppercase">Retour</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

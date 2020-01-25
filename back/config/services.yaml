@@ -9,6 +9,7 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
+        public: true
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
@@ -33,6 +34,10 @@ services:
 
     App\Domain\Todo\TodoRepository:
         alias: App\Infrastructure\Persistence\Todo\MongoTodoRepository
+
+    App\Application\EventSubscribers\ApiExceptionSubscriber:
+        tags:
+            - { name: kernel.event_subscriber, event: kernel.exception }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

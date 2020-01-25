@@ -5,49 +5,58 @@
 {% endblock %}
 
 {% block body %}
-        <div class="container">
-            <div class="col-lg-8 offset-lg-2 text-center pt-5">
-                    <h1>
-                        <img src="/assets/img/logo.png" width="60" height="60" class="d-inline-block align-top mr-4" alt="">
-                        Projet ToDo <strike style="font-size:12px;">(à faire...)</strike>
-                        <img src="/assets/img/logo.png" width="60" height="60" class="d-inline-block align-top ml-2" alt="">
-                    </h1>
-                </div>
-                <hr>
+    <div class="container">
+        <div class="col-lg-8 offset-lg-2 text-center pt-5">
+            <h1>
+                <img src="/assets/img/logo.png" width="60" height="60" class="d-inline-block align-top mr-4" alt="">
+                Projet ToDo <strike style="font-size:12px;">(à faire...)</strike>
+                <img src="/assets/img/logo.png" width="60" height="60" class="d-inline-block align-top ml-2" alt="">
+            </h1>
         </div>
-
+        <hr>
+    </div>
+    {% if flash_error %}
         <div class="container pt-5">
             <div class="row justify-content-center my-auto">
-                <div class="col-sm-6">
-                    <form method="post">
-                        <h2 class="text-center">Inscription</h2>
-                        <hr>
-                        <div class="input-group py-1">
-                            <span class="text-muted col-sm-4 pt-1">Nom</span>
-                            <input type="text" class="form-control col-sm-8" name="lastname" placeholder="Hoffmann">
-                        </div>
-                        <div class="input-group py-1">
-                            <span class="text-muted col-sm-4 pt-1">Prénom</span>
-                            <input type="text" class="form-control col-sm-8" name="firstname" placeholder="Jean">
-                        </div>
-                        <div class="input-group py-1">
-                            <span class="text-muted col-sm-4 pt-1">Adresse e-mail</span>
-                            <input type="text" class="form-control col-sm-8" name="username" placeholder="example@gmail.com">
-                        </div>
-                        <div class="input-group pt-1">
-                            <span class="text-muted col-sm-4">Mot de passe</span>
-                            <input type="password" class="form-control col-sm-8" name="password" placeholder="*********">
-                        </div>
-                        <div class="input-group py-4 pt-1">
-                            <span class="text-muted col-sm-4">Confirmation de mot de passe</span>
-                            <input type="password" class="form-control col-sm-8" name="password" placeholder="*********">
-                        </div>
-                        <button class="btn btn-lg btn-primary w-100" type="submit">
-                            S'inscrire
-                        </button>
-                    </form>
+                <div class="alert alert-danger" role="alert">
+                    {{ flash_error }}
                 </div>
             </div>
         </div>
+    {% endif %}
+    <div class="container pt-5">
+        <div class="row justify-content-center my-auto">
+            <div class="col-sm-6">
+                <form method="post" action="/signup">
+                    <h2 class="text-center">Inscription</h2>
+                    <hr>
+                    <div class="input-group py-1">
+                        <span class="text-muted col-sm-4 pt-1">Nom</span>
+                        <input type="text" class="form-control col-sm-8" name="lastname" placeholder="Hoffmann">
+                    </div>
+                    <div class="input-group py-1">
+                        <span class="text-muted col-sm-4 pt-1">Prénom</span>
+                        <input type="text" class="form-control col-sm-8" name="firstname" placeholder="Jean">
+                    </div>
+                    <div class="input-group py-1">
+                        <span class="text-muted col-sm-4 pt-1">Adresse e-mail</span>
+                        <input type="text" class="form-control col-sm-8" name="username"
+                               placeholder="example@gmail.com">
+                    </div>
+                    <div class="input-group pt-1">
+                        <span class="text-muted col-sm-4">Mot de passe</span>
+                        <input type="password" class="form-control col-sm-8" name="password" placeholder="*********">
+                    </div>
+                    <div class="input-group py-4 pt-1">
+                        <span class="text-muted col-sm-4">Confirmation de mot de passe</span>
+                        <input type="password" class="form-control col-sm-8" name="password" placeholder="*********">
+                    </div>
+                    <button class="btn btn-lg btn-primary w-100" type="submit">
+                        S'inscrire
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
     </div>
 {% endblock %}
