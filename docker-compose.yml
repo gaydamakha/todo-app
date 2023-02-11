@@ -1,26 +1,44 @@
-version: '3.7'
+version: '3.8'
 
 services:
-    back-front:
-        build: ./back-front
-        working_dir: /var/www/html/
-        environment:
-            docker: "true"
-        ports:
-            - 8000:8080
-        volumes:
-            - ./back-front:/var/www/html
-            - /var/www/html/node_modules
-            - /var/www/html/public/build
-            - /var/www/html/vendor
-    back:
-        build: ./back/
-        working_dir: /var/www/html/
-        environment:
-            docker: "true"
-        ports:
-            - 8001:8080
-        volumes:
-            - ./back/:/var/www/html
-            - /var/www/html/vendor
-            - /var/www/html/config/jwt
+  back-front:
+    build: ./back-front
+    working_dir: /var/www/html/
+#    environment:
+#      docker: "true"
+    ports:
+      - "8000:8080"
+    volumes:
+      - ./back-front:/var/www/html
+      - /var/www/html/node_modules
+      - /var/www/html/public/build
+      - /var/www/html/vendor
+  back:
+    build: ./back/
+    working_dir: /var/www/html/
+#    environment:
+#      docker: "true"
+    ports:
+      - "8001:8080"
+    volumes:
+      - ./back/:/var/www/html
+      - /var/www/html/vendor
+      - /var/www/html/config/jwt
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:
+
+networks:
+  default:
+    name: chargemap
+    external: true

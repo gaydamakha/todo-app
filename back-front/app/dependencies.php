@@ -35,7 +35,7 @@ return function (ContainerInterface $container) {
     $container['http_client'] = function(ContainerInterface $container) {
         $client = new Client([
             // Base URI is used with relative requests
-            'base_uri' => 'http://192.168.99.100:8001/',//TODO: get from env
+            'base_uri' => 'http://back:8080',//TODO: get from env
             'timeout'  => 30.0,
             'defaults' => [
                 'headers'  => [

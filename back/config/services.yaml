@@ -4,7 +4,9 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    mongodb_server: "mongodb+srv://airplane-pc:RlhHnniUYjWuDvcs@gaid-test-cluster-8mpxr.mongodb.net/test"
+    mongodb_server: '%env(resolve:DATABASE_URL)%'
+    env(MONGODB_URL): ''
+    env(MONGODB_DB): ''
 
 services:
     # default configuration for services in *this* file

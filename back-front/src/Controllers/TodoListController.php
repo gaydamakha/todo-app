@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Adbar\Session;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Psr\Container\ContainerInterface;
 use Slim\Http\Request as ServerRequest;
 use Slim\Http\Response;
@@ -88,7 +89,7 @@ class TodoListController
                 ],
                 'body' => $body
             ]);
-        } catch (\Exception $e) {
+        } catch (ClientException $e) {
             return (new Response())->withJson($e->getResponse()->getBody()->getContents(), $e->getCode());
         }
         $session->add('flash_success', 'Created!');

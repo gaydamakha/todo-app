@@ -1,21 +1,22 @@
-FROM alpine:3.10
+FROM php:8.2.2-fpm-alpine3.16
 
 # Install packages
-RUN apk --no-cache add php7 php7-fpm php7-json php7-openssl php7-curl php7-tokenizer\
-    php7-zlib php7-xml 	php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader php7-simplexml\
-    php7-ctype php7-session php7-mbstring php7-gd php7-pear php7-dev php7-fileinfo php7-iconv\
+RUN apk upgrade && apk --no-cache add php8-json php8-openssl php8-curl php8-tokenizer\
+    php8-zlib php8-xml php8-xmlwriter php8-phar php8-intl php8-dom php8-xmlreader php8-simplexml\
+    php8-ctype php8-session php8-mbstring php8-gd php8-pear php8-dev php8-fileinfo php8-iconv php8-sodium \
     libressl-dev nginx supervisor curl gcc musl-dev make openssl
 
-RUN pecl install mongodb && chmod 755 /usr/lib/php7/modules/mongodb.so
+RUN pecl install mongodb
+
+RUN echo "extension=mongodb.so" > $PHP_INI_DIR/conf.d/mongo.ini
 
 # Configure nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
 # Remove default server definition
-RUN rm /etc/nginx/conf.d/default.conf
 
 # Configure PHP-FPM
-COPY config/fpm-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY config/php.ini /etc/php7/conf.d/custom.ini
+COPY config/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
+COPY config/php.ini /etc/php8/conf.d/custom.ini
 
 # Configure supervisord
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -23,7 +24,6 @@ COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Make sure files/folders needed by the processes are accessable when they run under the nobody user
 RUN chown -R nobody.nobody /run && \
   chown -R nobody.nobody /var/lib/nginx && \
-  chown -R nobody.nobody /var/tmp/nginx && \
   chown -R nobody.nobody /var/log/nginx
 
 # Install composer
@@ -58,9 +58,9 @@ RUN chown -R nobody:nobody /var/www/html
 USER nobody
 
 # Generate keys for JWT
-RUN mkdir -p /var/www/html/config/jwt
-RUN openssl genpkey -out /var/www/html/config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:lalalala
-RUN openssl pkey -in /var/www/html/config/jwt/private.pem -out /var/www/html/config/jwt/public.pem -pubout -passin pass:lalalala
+#RUN mkdir -p /var/www/html/config/jwt
+#RUN openssl genpkey -out /var/www/html/config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096 -pass pass:lalalala
+#RUN openssl pkey -in /var/www/html/config/jwt/private.pem -out /var/www/html/config/jwt/public.pem -pubout -passin pass:lalalala
 
 # Expose the port nginx is reachable on
 EXPOSE 8080

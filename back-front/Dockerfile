@@ -4,7 +4,7 @@ FROM alpine:3.10
 RUN apk --no-cache add php7 php7-fpm php7-json php7-openssl php7-curl php7-tokenizer\
     php7-zlib php7-xml 	php7-xmlwriter php7-phar php7-intl php7-dom php7-xmlreader php7-simplexml\
     php7-ctype php7-session php7-mbstring php7-gd php7-pear php7-dev php7-fileinfo php7-iconv\
-    libressl-dev nginx supervisor curl gcc musl-dev make
+    libressl-dev nginx supervisor curl gcc musl-dev make python g++
 
 # Configure nginx
 COPY config/nginx.conf /etc/nginx/nginx.conf
@@ -51,7 +51,7 @@ COPY --chown=nobody . /var/www/html/
 
 # Install dependencies
 COPY package.json /var/www/html/package.json
-RUN npm config set registry http://registry.npmjs.org/ && npm install
+RUN npm config set registry https://registry.npmjs.org/ && npm install
 RUN npm run build
 COPY composer.json /var/www/html/composer.json
 RUN composer install
